@@ -2,35 +2,28 @@ const express = require('express');
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const crypto = require('crypto');
+const http = require('http');
+const cors = require('cors');
 
 const app = express();
-// Şifreleme anahtarı
-const key = 'your_secret_key';
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// CORS middleware'ini uygula
+app.use(cors({
+    origin: 'http://127.0.0.1:5501', // İstemci adresi
+    credentials: true // Kimlik bilgisi (cookie, token vs.) gönderilmesine izin ver
+}));
+
 const port = process.env.PORT || 3000;
 
-// Şifrelenmiş bağlantı bilgilerinin dosya yolu
-const encryptedConfigFilePath = 'encrypted_db_config.json';
-
-// Bağlantı bilgilerini çözmek için fonksiyon
-function decryptConfigFile() {
-    // Şifrelenmiş JSON dosyasını oku
-    const encryptedConfig = fs.readFileSync(encryptedConfigFilePath, 'utf8');
-
-    // Şifreyi çöz
-    const decipher = crypto.createDecipher('aes-256-cbc', key);
-    let decryptedConfig = decipher.update(encryptedConfig, 'hex', 'utf8');
-    decryptedConfig += decipher.final('utf8');
-
-    // JSON formatına dönüştür
-    const config = JSON.parse(decryptedConfig);
-
-    return config;
-}
-
-// Bağlantı bilgilerini çöz
-const dbConfig = decryptConfigFile();
+// Database bağlantı bilgileri
+const dbConfig = {
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: '6kelimetekrar'
+};
 
 // MySQL bağlantısı oluşturma
 const db = mysql.createConnection(dbConfig);
@@ -43,10 +36,6 @@ db.connect((err) => {
     }
     console.log('MySQL veritabanına başarıyla bağlanıldı');
 });
-
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Kayıt olma (register) endpoint'i
 app.post('/register', async (req, res) => {
@@ -121,8 +110,8 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-// API'yi dinlemeye başlayalım
-app.listen(port, () => {
+// Sunucuyu başlat
+const server = http.createServer(app);
+server.listen(port, () => {
     console.log(`API çalışıyor: http://localhost:${port}`);
 });
