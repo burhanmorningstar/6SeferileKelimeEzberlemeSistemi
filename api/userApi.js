@@ -60,10 +60,10 @@ app.post('/register', async (req, res) => {
                         (err, result) => {
                             if (err) {
                                 console.error('Kullanıcı eklenirken bir hata oluştu: ' + err.message);
-                                res.status(500).send("Kayıt olurken bir hata oluştu.");
+                                res.status(500).json({ message: "Kullanıcı oluşturulurken bir hata oluştu." });
                             } else {
                                 console.log('Kullanıcı başarıyla kaydedildi');
-                                res.status(201).send("Kullanıcı başarıyla oluşturuldu.");
+                                res.status(201).json({ message: "Kullanıcı başarıyla oluşturuldu." });
                             }
                         }
                     );
