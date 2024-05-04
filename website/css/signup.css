@@ -23,9 +23,6 @@ body {
     width: 100vw;
     height: 80vh;
     margin: auto;
-    border: 2px dotted #fff;
-    background: transparent;
-    backdrop-filter: blur(20px);
 }
 
 img {
@@ -82,7 +79,6 @@ button:hover {
         transform: scale(1, 1);
     }
 }
-
 @media (max-width: 768px) {
     .container {
         height: 100vh;
