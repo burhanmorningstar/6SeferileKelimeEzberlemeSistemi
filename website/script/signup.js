@@ -7,7 +7,7 @@ registerSubmitBtn.addEventListener("click", async function (event) {
   const email = document.getElementById("user_email_address").value;
   const password = document.getElementById("user_password").value;
   const fullname = document.getElementById("user_fullname").value;
-
+  
   try {
     const response = await fetch(apiUrl + "/register", {
       method: "POST",
