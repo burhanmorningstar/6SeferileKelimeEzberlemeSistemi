@@ -1,12 +1,12 @@
 CREATE TABLE users (
-  user_id SERIAL PRIMARY KEY,
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
   user_password VARCHAR(255),
   user_email_address VARCHAR(45) UNIQUE,
   user_fullname VARCHAR(255)
 );
 
 CREATE TABLE words (
-  word_id SERIAL PRIMARY KEY,
+  word_id INT AUTO_INCREMENT PRIMARY KEY,
   word_meaning VARCHAR(45),
   word VARCHAR(45),
   word_image VARCHAR(45),
@@ -15,14 +15,28 @@ CREATE TABLE words (
 );
 
 CREATE TABLE wordDetails (
-  id SERIAL PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   word_counter INT,
-  word_id INT REFERENCES words(word_id),
-  user_id INT REFERENCES users(user_id)
+  word_id INT,
+  user_id INT,
+  FOREIGN KEY (word_id) REFERENCES words(word_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE settings (
-  setting_id SERIAL PRIMARY KEY,
-  user_id INT UNIQUE REFERENCES users(user_id),
-  word_limit INT DEFAULT 10
+  setting_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNIQUE,
+  word_limit INT DEFAULT 10,
+  next_ask_date DATE,
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE knownWords (
+  known_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  word_id INT,
+  last_asked_date DATE,
+  next_ask_date DATE,
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (word_id) REFERENCES words(word_id)
 );

@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const http = require('http');
 const cors = require('cors');
 
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -107,6 +108,84 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Hata: ' + error.message);
         res.status(500).send("Bir hata oluştu.");
+    }
+});
+
+const randomstring = require('randomstring');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+// Nodemailer transporter oluşturma
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'deneme123yazilimyapimi@gmail.com', // Gönderen e-posta adresi
+        pass: 'shdg xvft hlqp hvxs'
+    }
+});
+
+//Email gönderme endpoint'i
+app.post('/sendEmail', async (req, res) => {
+    try {
+        const { user_email_address } = req.body;
+
+        const verificationCode = randomstring.generate({
+            length: 4,
+            charset: 'numeric'
+        });
+
+        // Mail seçeneklerini ayarlayın
+        let mailOptions = {
+            from: 'geirenfare@gmail.com', // Gönderen e-posta adresi
+            to: user_email_address, // Alıcı e-posta adresi
+            subject: 'Şifre Sıfırlama', // E-posta konusu
+            text: `Şifrenizi sıfırlamak için aşağıdaki 4 haneli kodu kullanın: ${verificationCode}`
+        };
+
+        db.query('UPDATE users SET verification_code = ? WHERE user_email_address = ?', 
+            [verificationCode, user_email_address], 
+            (err) => {
+                if (err) {
+                    console.error('Doğrulama kodu oluşturulurken bir hata oluştu:' + err.message);
+                    res.status(500).json({ message: 'Doğrulama kodu oluşturulurken bir hata oluştu.' });
+                } else {
+                    console.log('');
+                    res.status(200).json({ message: 'Doğrulama kodu başarıyla oluşturuldu' });
+                }
+            }
+        );
+        // Maili gönderin
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Şifre sıfırlama bağlantısı gönderilirken bir hata oluştu:', error);
+        res.status(500).json({ message: 'Şifre sıfırlama bağlantısı gönderilirken bir hata oluştu.' });
+    }
+});
+
+app.post('/resetPassword', async (req, res) => {
+    try {
+        const { verification_code, user_password } = req.body;
+
+        // Yeni parolayı bcrypt ile şifreleyelim
+        const hashedPassword = await bcrypt.hash(user_password, 10);
+
+        // Parolayı veritabanında güncelleyelim
+        db.query('UPDATE users SET user_password = ? WHERE verification_code = ?', 
+            [hashedPassword, verification_code], 
+            (err) => {
+                if (err) {
+                    console.error('Şifre sıfırlanırken bir hata oluştu: ' + err.message);
+                    res.status(500).json({ message: 'Şifre sıfırlanırken bir hata oluştu.' });
+                } else {
+                    console.log('Şifre başarıyla sıfırlandı');
+                    res.status(200).json({ message: 'Şifre başarıyla sıfırlandı.' });
+                }
+            }
+        );
+    } catch (error) {
+        console.error('Şifre sıfırlama işlemi sırasında bir hata oluştu:', error);
+        res.status(500).json({ message: 'Şifre sıfırlama işlemi sırasında bir hata oluştu.' });
     }
 });
 
