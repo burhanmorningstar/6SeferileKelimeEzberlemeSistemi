@@ -27,7 +27,7 @@ registerSubmitBtn.addEventListener("click", async function (event) {
       console.log("Kayit başarılı.");
 
       // Kullanıcıyı yönlendir (örneğin ana sayfaya)
-      window.location.href = "/index.html";
+      //window.location.href = "/index.html";
     } else {
       // Giriş başarısız, hata mesajını göster
       console.error(data.message);
