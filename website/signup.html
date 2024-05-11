@@ -20,14 +20,14 @@
         <div class="row">
             <div class="col-md-6 d-flex align-items-center justify-content-center flex-column">
                 <h1 class="text-center text-white" id="form_title">Sign Up</h1>
-                <form action="" method="post" id="form">
+                <form action="" method="post" id="registerForm">
                     <div class="form-group">
                         <label for="full_name" class="text-white">Full Name</label>
-                        <input type="text" name="user_full_name" id="user_full_name" class="form-control" required>
+                        <input type="text" name="user_fullname" id="user_fullname" class="form-control" autocomplete="username" required>
                     </div>
                     <div class="form-group">
                         <label for="user_email_address" class="text-white">Email Address</label>
-                        <input type="email" name="user_email_address" id="user_email_address" class="form-control"
+                        <input type="email" name="user_email_address" id="user_email_address" class="form-control" autocomplete="email"
                             required>
                     </div>
                     <div class="form-group">
@@ -40,7 +40,7 @@
                         <input type="password" name="confirm_password" id="confirm_password" class="form-control"
                             autocomplete="new-password" required>
                     </div>
-                    <button type="submit" id="loginSubmitBtn" class="btn">Submit</button>
+                    <button type="submit" id="registerSubmitBtn" class="btn">Submit</button>
                 </form>
 
             </div>
