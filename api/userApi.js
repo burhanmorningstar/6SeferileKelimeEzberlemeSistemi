@@ -38,6 +38,40 @@ db.connect((err) => {
     console.log('MySQL veritabanına başarıyla bağlanıldı');
 });
 
+// Kullanıcı kaydolduğunda varsayılan ayarları eklemek için fonksiyon
+function addDefaultSettings(userId) {
+    const defaultSettings = { word_counter: 0, word_limit: 10, next_ask_date: new Date().toISOString().split('T')[0] };
+    db.query('INSERT INTO settings SET ?', { user_id: userId, ...defaultSettings }, (err, result) => {
+      if (err) {
+        console.error('Varsayılan ayarlar eklenirken bir hata oluştu:', err);
+      } else {
+        console.log('Kullanıcı için varsayılan ayarlar başarıyla eklendi:', userId);
+      }
+    });
+  }
+  
+  // Kullanıcının ayarlarını almak için endpoint
+  router.get('/settings/:userId', (req, res) => {
+    const userId = req.params.userId;
+    db.query('SELECT * FROM settings WHERE user_id = ?', userId, (err, result) => {
+      if (err) {
+        console.error('Kullanıcı ayarları alınırken bir hata oluştu:', err);
+        res.status(500).send('Kullanıcı ayarları alınırken bir hata oluştu');
+      } else {
+        if (result.length === 0) {
+          // Eğer kullanıcıya ait ayarlar bulunamazsa varsayılan ayarları ekleyin
+          addDefaultSettings(userId);
+          // Varsayılan ayarları gönderin
+          res.status(200).json({ word_counter: 0, word_limit: 10, next_ask_date: new Date().toISOString().split('T')[0] });
+        } else {
+          // Kullanıcının ayarlarını gönderin
+          res.status(200).json(result[0]);
+        }
+      }
+    });
+  });
+
+  
 // Kayıt olma (register) endpoint'i
 app.post('/register', async (req, res) => {
     try {
@@ -124,42 +158,85 @@ const transporter = nodemailer.createTransport({
         pass: 'shdg xvft hlqp hvxs'
     }
 });
-
-//Email gönderme endpoint'i
+// Email gönderme endpoint'i
 app.post('/sendEmail', async (req, res) => {
     try {
         const { user_email_address } = req.body;
 
-        const verificationCode = randomstring.generate({
-            length: 4,
-            charset: 'numeric'
-        });
+        // Kullanıcının veritabanında var olup olmadığını kontrol edelim
+        db.query('SELECT * FROM users WHERE user_email_address = ?', [user_email_address], async (err, result) => {
+            if (err) {
+                console.error('Kullanıcı sorgulanırken bir hata oluştu: ' + err.message);
+                res.status(500).send("E-posta gönderilirken bir hata oluştu.");
+            } else {
+                if (result.length > 0) {
+                    const verificationCode = randomstring.generate({
+                        length: 4,
+                        charset: 'numeric'
+                    });
 
-        // Mail seçeneklerini ayarlayın
-        let mailOptions = {
-            from: 'geirenfare@gmail.com', // Gönderen e-posta adresi
-            to: user_email_address, // Alıcı e-posta adresi
-            subject: 'Şifre Sıfırlama', // E-posta konusu
-            text: `Şifrenizi sıfırlamak için aşağıdaki 4 haneli kodu kullanın: ${verificationCode}`
-        };
+                    // Mail seçeneklerini ayarlayın
+                    let mailOptions = {
+                        from: 'deneme123yazilimyapimi@gmail.com', // Gönderen e-posta adresi
+                        to: user_email_address, // Alıcı e-posta adresi
+                        subject: 'Şifre Sıfırlama', // E-posta konusu
+                        text: `Şifrenizi sıfırlamak için aşağıdaki 4 haneli kodu kullanın: ${verificationCode}`
+                    };
 
-        db.query('UPDATE users SET verification_code = ? WHERE user_email_address = ?', 
-            [verificationCode, user_email_address], 
-            (err) => {
-                if (err) {
-                    console.error('Doğrulama kodu oluşturulurken bir hata oluştu:' + err.message);
-                    res.status(500).json({ message: 'Doğrulama kodu oluşturulurken bir hata oluştu.' });
+                    db.query('UPDATE users SET verification_code = ? WHERE user_email_address = ?', 
+                        [verificationCode, user_email_address], 
+                        (err) => {
+                            if (err) {
+                                console.error('Doğrulama kodu oluşturulurken bir hata oluştu:' + err.message);
+                                res.status(500).json({ message: 'Doğrulama kodu oluşturulurken bir hata oluştu.' });
+                            } else {
+                                console.log('Doğrulama kodu başarıyla oluşturuldu');
+                                // Maili gönderin
+                                transporter.sendMail(mailOptions, (error, info) => {
+                                    if (error) {
+                                        console.error('E-posta gönderilirken bir hata oluştu:', error);
+                                        res.status(500).json({ message: 'E-posta gönderilirken bir hata oluştu.' });
+                                    } else {
+                                        console.log('E-posta başarıyla gönderildi:', info.response);
+                                        res.status(200).json({ message: 'E-posta başarıyla gönderildi.' });
+                                    }
+                                });
+                            }
+                        }
+                    );
                 } else {
-                    console.log('');
-                    res.status(200).json({ message: 'Doğrulama kodu başarıyla oluşturuldu' });
+                    res.status(404).json({ message: 'Kullanıcı bulunamadı.' });
                 }
             }
-        );
-        // Maili gönderin
-        await transporter.sendMail(mailOptions);
+        });
     } catch (error) {
-        console.error('Şifre sıfırlama bağlantısı gönderilirken bir hata oluştu:', error);
-        res.status(500).json({ message: 'Şifre sıfırlama bağlantısı gönderilirken bir hata oluştu.' });
+        console.error('E-posta gönderilirken bir hata oluştu:', error);
+        res.status(500).json({ message: 'E-posta gönderilirken bir hata oluştu.' });
+    }
+});
+
+// Doğrulama kodunu kontrol etme endpoint'i
+app.post('/verifyCode', async (req, res) => {
+    try {
+        const { verification_code } = req.body;
+
+        // Doğrulama kodunu veritabanında kontrol edelim
+        db.query('SELECT * FROM users WHERE verification_code = ?', [verification_code], async (err, result) => {
+            if (err) {
+                console.error('Doğrulama kodu sorgulanırken bir hata oluştu: ' + err.message);
+                res.status(500).send("Doğrulama kodunu kontrol ederken bir hata oluştu.");
+            } else {
+                if (result.length > 0) {
+                    console.log('Doğrulama kodu doğru');
+                    res.status(200).json({ message: "Doğrulama kodu doğru." });
+                } else {
+                    res.status(404).send("Doğrulama kodu bulunamadı.");
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Hata: ' + error.message);
+        res.status(500).send("Bir hata oluştu.");
     }
 });
 

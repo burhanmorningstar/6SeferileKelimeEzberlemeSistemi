@@ -44,7 +44,6 @@ resetForm.addEventListener('submit', async (e) => {
     const confirmPassword = document.getElementById("confirm_password").value;
 
     try {
-        // Doğrulama kodu, yeni parola ve tekrar parola kontrolü
         if (!verificationCode || !newPassword || !confirmPassword) {
             throw new Error('Doğrulama kodu ve yeni parolaları giriniz.');
         }
@@ -52,7 +51,22 @@ resetForm.addEventListener('submit', async (e) => {
             throw new Error('Girilen parolalar uyuşmuyor.');
         }
 
-        const response1 = await fetch(apiUrl + '/resetPassword', {
+        const response1 = await fetch(apiUrl + '/verifyCode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                verification_code: verificationCode,
+            }),
+        });
+
+        const data1 = await response1.json();
+        if (response1.status !== 200) {
+            throw new Error('Doğrulama kodu yanlış.');
+        }
+
+        const response2 = await fetch(apiUrl + '/resetPassword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,8 +77,8 @@ resetForm.addEventListener('submit', async (e) => {
             }),
         });
 
-        const data = await response1.json();
-        messageDiv.textContent = data.message;
+        const data2 = await response2.json();
+        messageDiv.textContent = data2.message;
         messageDiv.style.display = 'block';
         
     } catch (error) {
