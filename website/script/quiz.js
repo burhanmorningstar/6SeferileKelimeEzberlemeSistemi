@@ -1,7 +1,6 @@
-// quiz.js
-
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get("user_id");
 // Kullanıcı ayarlarını tutacak değişkenler
-let userId = 4; // Kullanıcı kimliği
 let wordLimit = 10; // Kelime limiti
 let nextAskDate = new Date(); // Sonraki sorma tarihi
 

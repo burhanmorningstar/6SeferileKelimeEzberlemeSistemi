@@ -22,13 +22,8 @@ loginSubmitBtn.addEventListener("click", async function (event) {
     const data = await response.json();
     if (response.ok) {
       // Giriş başarılı
-      console.log("Giriş başarılı, token:", data.token);
-
-      // Token'i sakla (örneğin local storage'da)
-      localStorage.setItem("token", data.token);
-
-      // Kullanıcıyı yönlendir (örneğin ana sayfaya)
-      //window.location.href = "/anasayfa.html";
+      console.log("Giriş başarılı, user_id:",data.user_id);
+      window.location.href = "quiz.html?user_id=" + data.user_id;
     } else {
       // Giriş başarısız, hata mesajını göster
       console.error(data.message);
