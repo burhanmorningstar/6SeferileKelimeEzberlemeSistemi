@@ -26,36 +26,41 @@ db.connect((err) => {
   console.log("Connected to MySQL database");
 });
 
-// Kelimeleri döndüren endpoint
-app.get("/questions", async (req, res) => {
+app.get("/questions/:userId", async (req, res) => {
   try {
-    // MySQL sorgusu: Word tablosundan bütün kelimeleri ve ilgili detayları getir
     const userId = req.params.userId;
-    const query = `
-    SELECT w.*, wd.word_counter, wd.user_id
-FROM words AS w
-LEFT JOIN worddetails AS wd ON w.word_id = wd.word_id
-LEFT JOIN settings AS s ON wd.user_id = s.user_id
-WHERE wd.word_counter < 6 
-AND wd.user_id = '${userId}'
-AND s.next_ask_date <= CURDATE()
-AND w.word_id IN (
-    SELECT word_id 
-    FROM worddetails 
-    WHERE user_id = '${userId}' AND word_counter < (SELECT word_limit FROM settings WHERE user_id = '${userId}')
-);
 
-`;
-    db.query(query, [userId], (error, results) => {
+    // Kullanıcının word_limit değerini al
+    db.query("SELECT word_limit FROM settings WHERE user_id = ?", [userId], (error, settingsResult) => {
       if (error) {
-        console.error("Error fetching words:", error);
+        console.error("Error fetching settings:", error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
       }
-      res.status(200).json("başarılı:",results);
+      
+      // Kullanıcıya ait word_limit değerini al
+      const wordLimit = settingsResult.length > 0 ? settingsResult[0].word_limit : 10;
+
+      // Rastgele bir kelime seç
+      const query = `
+        SELECT w.*, wd.word_counter, wd.user_id
+        FROM words AS w
+        INNER JOIN worddetails AS wd ON w.word_id = wd.word_id
+        WHERE wd.user_id = ? AND wd.word_counter < 6
+        ORDER BY RAND()
+        LIMIT ?;
+      `;
+      db.query(query, [userId, wordLimit], (error, results) => {
+        if (error) {
+          console.error("Error fetching questions:", error);
+          res.status(500).json({ message: "Internal Server Error" });
+          return;
+        }
+        res.json(results);
+      });
     });
   } catch (error) {
-    console.error("Error fetching words:", error);
+    console.error("Error fetching questions:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
