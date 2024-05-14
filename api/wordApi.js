@@ -31,18 +31,22 @@ app.get("/questions/:userId", async (req, res) => {
     const userId = req.params.userId;
 
     // Kullanıcının word_limit değerini al
-    db.query("SELECT word_limit FROM settings WHERE user_id = ?", [userId], (error, settingsResult) => {
-      if (error) {
-        console.error("Error fetching settings:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-        return;
-      }
-      
-      // Kullanıcıya ait word_limit değerini al
-      const wordLimit = settingsResult.length > 0 ? settingsResult[0].word_limit : 10;
+    db.query(
+      "SELECT word_limit FROM settings WHERE user_id = ?",
+      [userId],
+      (error, settingsResult) => {
+        if (error) {
+          console.error("Error fetching settings:", error);
+          res.status(500).json({ message: "Internal Server Error" });
+          return;
+        }
 
-      // Rastgele bir kelime seç
-      const query = `
+        // Kullanıcıya ait word_limit değerini al
+        const wordLimit =
+          settingsResult.length > 0 ? settingsResult[0].word_limit : 10;
+
+        // Rastgele bir kelime seç
+        const query = `
         SELECT w.*, wd.word_counter, wd.user_id
         FROM words AS w
         INNER JOIN worddetails AS wd ON w.word_id = wd.word_id
@@ -50,47 +54,76 @@ app.get("/questions/:userId", async (req, res) => {
         ORDER BY RAND()
         LIMIT ?;
       `;
-      db.query(query, [userId, wordLimit], (error, results) => {
-        if (error) {
-          console.error("Error fetching questions:", error);
-          res.status(500).json({ message: "Internal Server Error" });
-          return;
-        }
-        res.json(results);
-      });
-    });
+        db.query(query, [userId, wordLimit], (error, results) => {
+          if (error) {
+            console.error("Error fetching questions:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+            return;
+          }
+          res.json(results);
+        });
+      }
+    );
   } catch (error) {
     console.error("Error fetching questions:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Cevap kontrolü için endpoint
 app.post("/answer", async (req, res) => {
   try {
     const { userId, wordId, answer } = req.body;
 
-    // MySQL sorgusu: KnownWords tablosuna kullanıcının cevabını ekle
-    const insertQuery = `
-      INSERT INTO knownWords (user_id, word_id, last_asked_date, next_ask_date)
-      VALUES (?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 DAY))
-      ON DUPLICATE KEY UPDATE
-      last_asked_date = VALUES(last_asked_date),
-      next_ask_date = CASE WHEN VALUES(next_ask_date) <= CURDATE() THEN DATE_ADD(CURDATE(), INTERVAL 1 DAY) ELSE VALUES(next_ask_date) END;
+    // MySQL sorgusu: Verilen wordId'ye ait kelimenin doğru cevabını al
+    const selectQuery = `
+      SELECT word_meaning FROM words WHERE word_id = ?
     `;
-    db.query(insertQuery, [userId, wordId], (error, results) => {
+    db.query(selectQuery, [wordId], (error, results) => {
       if (error) {
-        console.error("Error inserting answer:", error);
+        console.error("Error fetching correct answer:", error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
       }
-      res.json({ message: "Answer checked successfully." });
+
+      const correctAnswer = results[0].word_meaning;
+
+      // Kullanıcının cevabı ile doğru cevabı karşılaştır
+      if (answer === correctAnswer) {
+        // Doğru cevaplanmış ise word_counter değerini arttır
+        db.query(
+          "UPDATE worddetails SET word_counter = word_counter + 1 WHERE user_id = ? AND word_id = ?",
+          [userId, wordId],
+          (error, updateResult) => {
+            if (error) {
+              console.error("Error updating word_counter:", error);
+              res.status(500).json({ message: "Internal Server Error" });
+              return;
+            }
+            res.json({ message: "Correct answer!" });
+          }
+        );
+      } else {
+        // Yanlış cevaplanmış ise word_counter değerini sıfırla
+        db.query(
+          "UPDATE worddetails SET word_counter = 0 WHERE user_id = ? AND word_id = ?",
+          [userId, wordId],
+          (error, updateResult) => {
+            if (error) {
+              console.error("Error updating word_counter:", error);
+              res.status(500).json({ message: "Internal Server Error" });
+              return;
+            }
+            res.json({ message: "Incorrect answer." });
+          }
+        );
+      }
     });
   } catch (error) {
     console.error("Error checking answer:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 // Kullanıcı kaydolduğunda varsayılan ayarları eklemek için fonksiyon
 function addDefaultSettings(userId) {
   const defaultSettings = {

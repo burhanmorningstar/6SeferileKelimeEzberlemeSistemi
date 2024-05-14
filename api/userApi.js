@@ -115,7 +115,7 @@ app.post("/login", async (req, res) => {
             const user_id = user.user_id;
             if (passwordMatch) {
               console.log("Kullanıcı başarıyla giriş yaptı");
-              res.status(200).json({});
+              res.status(200).json({user_id: user_id});
             } else {
               res.status(401).send("Hatalı e-posta veya şifre.");
             }
