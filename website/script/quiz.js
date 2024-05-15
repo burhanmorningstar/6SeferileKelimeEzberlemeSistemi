@@ -1,153 +1,165 @@
-// Kullanıcı cevaplarını saklayacak diziler
-let correctAnswers = [];
-let wrongAnswers = [];
-let userAnswers = [];
-let questions = [];
-let currentQuestionIndex = 0;
-
-// API URL'leri
 const wordApiUrl = "http://localhost:3001";
 const userApiUrl = "http://localhost:3000";
 
-// fetchQuestions fonksiyonunu düzenleyin
+// Kullanıcı cevaplarını saklayacak diziler
+let correctAnswers = [];
+let userAnswers = [];
+let resultQuestions = [];
+let questions = [];
+let currentQuestionIndex = 0;
+
+// Event listener'ları güncelle
+document.addEventListener("DOMContentLoaded", () => {
+  // Kullanıcı kimliğiyle soruları getir
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("user_id");
+  fetchQuestions(userId);
+});
+
+/// fetchQuestions fonksiyonunu güncelle
 function fetchQuestions(userId) {
   fetch(wordApiUrl + "/questions/" + userId)
     .then((response) => response.json())
     .then((data) => {
       questions = data;
-      showFirstQuestion(); // fetch işlemi tamamlandığında ilk soruyu göster
+      console.log("Sorular başarıyla getirildi:", questions);
+      // Doğru ve kullanıcı cevaplarını sıfırla
+      correctAnswers = [];
+      userAnswers = [];
+      showNextQuestion(); // fetch işlemi tamamlandığında ilk soruyu göster
     })
     .catch((error) =>
       console.error("Kelime alınırken bir hata oluştu:", error)
     );
 }
 
-// İlk soruyu gösterme
-function showFirstQuestion() {
-  const firstQuestion = questions[0];
-  updateHtml(firstQuestion);
+function submitAnswer() {
+  const answerInput = document.getElementById("answer");
+  const answer = answerInput.value.trim(); // Trim whitespace
+  if (!answer) {
+    alert("Answer can't be empty.");
+    return;
+  }
+
+  const currentQuestion = questions[currentQuestionIndex - 1];
+  const wordId = currentQuestion.word_id;
+  const userId = currentQuestion.user_id;
+
+  submitAnswerToApi(userId, wordId, answer);
+}
+// submitAnswerToApi fonksiyonunu güncelle
+async function submitAnswerToApi(userId, wordId, answer) {
+  try {
+    const response = await fetch(wordApiUrl + "/answer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        wordId,
+        answer,
+      }),
+    });
+    const result = await response.json();
+
+    // Doğru veya yanlış cevaba göre işlem yap
+    result.message === "Correct answer!"
+      ? console.log("Correct answer!")
+      : console.log("Incorrect answer.");
+    userAnswers.push(answer); // Kullanıcının cevabını ekleyin
+
+    // Sonraki soruyu göster
+    showNextQuestion();
+  } catch (error) {
+    console.error("Cevap gönderilirken bir hata oluştu:", error);
+  }
 }
 
-// Sonraki soruyu gösterme
+let nextQuestion;
+
 function showNextQuestion() {
-  currentQuestionIndex++;
   if (currentQuestionIndex < questions.length) {
-    const nextQuestion = allQuestions[currentQuestionIndex];
+    nextQuestion = questions[currentQuestionIndex];
+    currentQuestionIndex++;
+    console.log("Sıradaki soru:", nextQuestion);
     updateHtml(nextQuestion);
   } else {
     console.log("Tüm sorular gösterildi.");
-    // Tüm sorular gösterildiyse sonuçları gösterme modal'ını göster
-    showResultModal();
+    updateHtml(null);
   }
 }
 
-// API'den gelen cevaba göre işlem yapacak fonksiyon
-async function submitAnswer(wordId, userId) {
-  const answer = document.getElementById("answer").value;
-  userAnswers.push(answer);
-  const response = await fetch(wordApiUrl + "/answer", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userId,
-      wordId,
-      answer,
-    }),
-  });
-  const result = await response.json();
-
-  // Doğru veya yanlış cevaba göre diziye ekleme
-  if (result.message === "Correct answer!") {
-    correctAnswers.push(wordId);
-  } else {
-    wrongAnswers.push(wordId);
-  }
-
-  // Sonraki soruyu göster
-  showNextQuestion();
-}
-// submitBtn event listener'ını düzenleyin
-const submitBtn = document.getElementById("submitBtn");
-submitBtn.addEventListener("click", submitAnswer);
-
-// HTML'i güncelleyecek fonksiyon
 const updateHtml = (question) => {
   const questionContainer = document.getElementById("question-container");
   if (question) {
-    questionContainer.innerHTML = `
-      <div>
-        <p>English: ${question.word}</p>
-        <p>Sentence: ${question.word_in_sentence}</p>
-        <img src="${question.word_image}" alt="Image">
-        <audio controls>
-          <source src="${question.word_voice}" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-      <input type="text" id="answer" placeholder="Enter your answer">
-      <button id="submitBtn">Submit</button>
-    `;
-    const imageSrc = question.word_image;
-    const audioSrc = question.word_voice;
+    // Yeni bir div öğesi oluştur
+    const newQuestionDiv = document.createElement("div");
 
-    document.getElementById("image").src = imageSrc;
-    document.getElementById("audio").src = audioSrc;
+    // İngilizce kelimeyi ve cümleyi ekle
+    const englishParagraph = document.createElement("p");
+    englishParagraph.textContent = `English: ${question.word}`;
+    newQuestionDiv.appendChild(englishParagraph);
+
+    const usageParagraph = document.createElement("p");
+    usageParagraph.textContent = `Sentence: ${question.word_in_sentence}`;
+    newQuestionDiv.appendChild(usageParagraph);
+
+    // Resim ve ses öğelerini ekleyin
+    const imageElement = document.createElement("img");
+    imageElement.src = question.word_image;
+    imageElement.alt = "Image";
+    newQuestionDiv.appendChild(imageElement);
+
+    const audioElement = document.createElement("audio");
+    audioElement.controls = true;
+    const audioSource = document.createElement("source");
+    audioSource.src = question.word_voice;
+    audioSource.type = "audio/mpeg"; // MP3 dosyaları için tip
+    audioElement.appendChild(audioSource);
+    newQuestionDiv.appendChild(audioElement);
+
+    // Cevap giriş alanını ve düğmesini ekleyin
+    const answerInput = document.createElement("input");
+    answerInput.id = "answer";
+    answerInput.type = "text";
+    answerInput.placeholder = "Enter your answer";
+    newQuestionDiv.appendChild(answerInput);
+
+    const submitButton = document.createElement("button");
+    submitButton.id = "submitBtn";
+    submitButton.textContent = "Submit";
+    submitButton.addEventListener("click", () =>
+      submitAnswer(question.word_id, question.user_id)
+    );
+    newQuestionDiv.appendChild(submitButton);
+
+    // Listen for "Enter" key press event
+    answerInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        submitAnswer(question.word_id, question.user_id);
+      }
+    });
+
+    // Önceki soruyu temizle ve yeni soruyu ekle
+    questionContainer.innerHTML = "";
+    questionContainer.appendChild(newQuestionDiv);
   } else {
+    questionContainer.innerHTML = "";
     questionContainer.innerHTML = "<p>No more questions available.</p>";
+    const resetButton = document.createElement("button");
+    resetButton.textContent = "Reset Quiz";
+    resetButton.id = "resetBtn";
+    resetButton.addEventListener("click", resetQuiz);
+    questionContainer.appendChild(resetButton);
   }
 };
 
-// questionCheck fonksiyonunu düzenleyin
-function questionCheck(userAnswer, correctAnswer) {
-  if (userAnswer === correctAnswer) {
-    return 1;
-  } else {
-    return 0;
-  }
+function resetQuiz() {
+  correctAnswers = [];
+  userAnswers = [];
+  resultQuestions = [];
+  questions = [];
+  currentQuestionIndex = 0;
+  fetchQuestions(userId);
 }
-
-// Modalı gösterme
-function showResultModal() {
-  const modalContent = document.getElementById("results");
-  const tbody = document.getElementById("cevaplar-tablosu");
-  tbody.innerHTML = "";
-
-  for (let i = 0; i < correctAnswers.length; i++) {
-    const tr = document.createElement("tr");
-
-    const tdSoru = document.createElement("td");
-    tdSoru.textContent = questions[i].word;
-    tr.appendChild(tdSoru);
-
-    const tdKullaniciCevabi = document.createElement("td");
-    const kullaniciCevabi = userAnswers[i];
-    tdKullaniciCevabi.textContent = kullaniciCevabi
-      ? kullaniciCevabi.toLowerCase() === "doğru"
-        ? "Doğru"
-        : "Yanlış"
-      : "-";
-    tr.appendChild(tdKullaniciCevabi);
-
-    const tdDogruCevap = document.createElement("td");
-    tdDogruCevap.textContent = correctAnswers[i];
-    tr.appendChild(tdDogruCevap);
-
-    const tdSonuc = document.createElement("td");
-    const questionCheck = questionCheck(userAnswers[i], correctAnswers[i]);
-    tdSonuc.textContent = questionCheck === 1 ? "Doğru" : "Yanlış";
-    tr.appendChild(tdSonuc);
-
-    tbody.appendChild(tr);
-  }
-
-  // Modalı göster
-  $("#resultModal").modal("show");
-}
-
-// Kullanıcı kimliğiyle soruları göster
-const urlParams = new URLSearchParams(window.location.search);
-const userId = urlParams.get("user_id");
-fetchQuestions(userId);
-showFirstQuestion();
