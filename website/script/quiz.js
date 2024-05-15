@@ -7,12 +7,13 @@ let userAnswers = [];
 let resultQuestions = [];
 let questions = [];
 let currentQuestionIndex = 0;
+let userId;
 
 // Event listener'ları güncelle
 document.addEventListener("DOMContentLoaded", () => {
   // Kullanıcı kimliğiyle soruları getir
   const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get("user_id");
+  userId = urlParams.get("user_id");
   fetchQuestions(userId);
 });
 
@@ -26,6 +27,7 @@ function fetchQuestions(userId) {
       // Doğru ve kullanıcı cevaplarını sıfırla
       correctAnswers = [];
       userAnswers = [];
+      closeModal();
       showNextQuestion(); // fetch işlemi tamamlandığında ilk soruyu göster
     })
     .catch((error) =>
@@ -152,6 +154,7 @@ const updateHtml = (question) => {
     resetButton.id = "resetBtn";
     resetButton.addEventListener("click", resetQuiz);
     questionContainer.appendChild(resetButton);
+    showResults();
   }
 };
 
@@ -163,3 +166,54 @@ function resetQuiz() {
   currentQuestionIndex = 0;
   fetchQuestions(userId);
 }
+
+function closeModal() {
+  modal.classList.remove("show");
+  modal.style.display = "none";
+}
+
+var tbody = document.getElementById("cevaplar-tablosu");
+
+function showResults() {
+  tbody.innerHTML = "";
+
+  for (var i = 0; i < resultQuestions.length; i++) {
+    var tr = document.createElement("tr");
+
+    var tdSoru = document.createElement("td");
+    tdSoru.textContent = resultQuestions[i];
+    tr.appendChild(tdSoru);
+
+    var tdKullaniciCevabi = document.createElement("td");
+    var kullaniciCevabi = userAnswers[i];
+    kullaniciCevabi == null ? (kullaniciCevabi = "") : kullaniciCevabi;
+    tr.appendChild(tdKullaniciCevabi);
+
+    var tdDogruCevap = document.createElement("td");
+    tdDogruCevap.textContent = correctAnswers[i];
+    tr.appendChild(tdDogruCevap);
+
+    var tdSonuc = document.createElement("td");
+    var questionCheck = checkAnswer(userAnswers[i], correctAnswers[i]);
+    tdSonuc.textContent = questionCheck === 1 ? "Doğru" : "Yanlış";
+
+    tr.appendChild(tdSonuc);
+
+    tbody.appendChild(tr);
+  }
+}
+
+function checkAnswer(userAnswer, correctAnswer) {
+  if (userAnswer === correctAnswer) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+document.getElementById("closeModalBtn").addEventListener("click", function () {
+  closeModal();
+  resetQuiz();
+});
+
+var modal = document.getElementById("resultModal");

@@ -1,5 +1,5 @@
 const apiUrl = "http://localhost:3000";
-const wordApiUrl = "https://localhost:3001";
+const wordApiUrl = "http://localhost:3001";
 const loginSubmitBtn = document.getElementById("loginSubmitBtn");
 
 loginSubmitBtn.addEventListener("click", async function (event) {
@@ -23,11 +23,11 @@ loginSubmitBtn.addEventListener("click", async function (event) {
     const data = await response.json();
     if (response.ok) {
       // Giriş başarılı
-      const user_id = data.user_id; // Kullanıcı ID'sini al
+      const userId = data.user_id; // Kullanıcı ID'sini al
 
       try {
         const settingResponse = await fetch(
-          wordApiUrl + "/settings/" + user_id,
+          wordApiUrl + "/settings/" + userId,
           {
             method: "GET",
             headers: {
@@ -37,14 +37,11 @@ loginSubmitBtn.addEventListener("click", async function (event) {
         );
         const settingData = await settingResponse.json();
         console.log("Ayarlar başarıyla getirildi:", settingData);
-
-        // Burada aldığınız settingData ile gerekli işlemleri gerçekleştirin
       } catch (error) {
         console.error("Ayarlar alınırken bir hata oluştu:", error);
       }
-
-      console.log("Giriş başarılı, user_id:", user_id);
-      window.location.href = "quiz.html?user_id=" + user_id;
+      console.log("Giriş başarılı, user_id:", userId);
+      window.location.href = "quiz.html?user_id=" + userId;
     } else {
       // Giriş başarısız, hata mesajını göster
       console.error(data.message);
