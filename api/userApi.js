@@ -115,7 +115,7 @@ app.post("/login", async (req, res) => {
             const user_id = user.user_id;
             if (passwordMatch) {
               console.log("Kullanıcı başarıyla giriş yaptı");
-              res.status(200).json({user_id: user_id});
+              res.status(200).json({ user_id: user_id });
             } else {
               res.status(401).send("Hatalı e-posta veya şifre.");
             }
@@ -181,7 +181,7 @@ app.post("/sendEmail", async (req, res) => {
                 if (err) {
                   console.error(
                     "Doğrulama kodu oluşturulurken bir hata oluştu:" +
-                      err.message
+                    err.message
                   );
                   res.status(500).json({
                     message: "Doğrulama kodu oluşturulurken bir hata oluştu.",
