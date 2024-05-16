@@ -141,3 +141,11 @@ INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_imag
 INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_image, word_voice) VALUES ('newspaper', 'gazete', 'She reads the newspaper every morning over breakfast.', '"gorsel98.jpg"', '"ses98.mp3"');
 INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_image, word_voice) VALUES ('paper', 'kağıt', 'He wrote his thoughts on a piece of paper.', '"gorsel99.jpg"', '"ses99.mp3"');
 INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_image, word_voice) VALUES ('salt', 'tuz', '"She added a pinch of salt to the soup for flavor.', '"gorsel100.jpg"', '"ses100.mp3"');
+
+UPDATE words
+SET word_image = CONCAT('\\api\\gorseller\\gorsel', word_id, '.jpg')
+WHERE word_id BETWEEN 1 AND 100;
+
+UPDATE words
+SET word_voice = CONCAT('\\api\\sesler\\ses', word_id, '.mp3')
+WHERE word_id BETWEEN 1 AND 100;

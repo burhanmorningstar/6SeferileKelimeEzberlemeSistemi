@@ -99,6 +99,7 @@ app.post("/answer", async (req, res) => {
               res.status(500).json({ message: "Internal Server Error" });
               return;
             }
+            console.log("Correct answer!");
             res.json({ message: "Correct answer!" });
           }
         );
@@ -124,55 +125,57 @@ app.post("/answer", async (req, res) => {
   }
 });
 
-// Kullanıcı kaydolduğunda varsayılan ayarları eklemek için fonksiyon
 function addDefaultSettings(userId) {
-  const defaultSettings = {
-    word_counter: 0,
-    word_limit: 10,
-    next_ask_date: "2024-05-01", // next_ask_date değeri 1 Mayıs 2024 olarak ayarlandı
-  };
+  // Kullanıcının worddetails tablosunda kaydı var mı kontrol et
   db.query(
-    "INSERT INTO settings SET ?",
-    { user_id: userId, ...defaultSettings },
+    "SELECT * FROM worddetails WHERE user_id = ?",
+    userId,
     (err, result) => {
       if (err) {
-        console.error("Varsayılan ayarlar eklenirken bir hata oluştu:", err);
-      } else {
-        console.log(
-          "Kullanıcı için varsayılan ayarlar başarıyla eklendi:",
-          userId
-        );
+        console.error("Word details alınırken bir hata oluştu:", err);
+        return;
       }
+
+      // Eğer kullanıcının zaten kaydı varsa, yeni kayıt ekleme
+      if (result.length > 0) {
+        console.log(
+          "Kullanıcının worddetails tablosunda zaten kaydı bulunmaktadır."
+        );
+        return;
+      }
+
+      db.query("SELECT COUNT(*) AS total FROM words", (err, result) => {
+        if (err) {
+          console.error("Kelime sayısı alınırken bir hata oluştu:", err);
+          return;
+        }
+
+        const totalWords = result[0].total;
+
+        // Her kelime için ayar ekle
+        for (let i = 1; i <= totalWords; i++) {
+          const wordDetails = {
+            word_counter: 0,
+            user_id: userId,
+            word_id: i,
+          };
+          db.query(
+            "INSERT INTO worddetails SET ?",
+            wordDetails,
+            (err, result) => {
+              if (err) {
+                console.error("Word details eklenirken bir hata oluştu:", err);
+              } else {
+                console.log("Word details başarıyla eklendi:", result.insertId);
+              }
+            }
+          );
+        }
+      });
     }
   );
-
-  // Mevcut kelimelerin sayısına göre worddetails tablosuna kayıt ekleme
-  db.query("SELECT COUNT(*) AS total FROM words", (err, result) => {
-    if (err) {
-      console.error("Kelime sayısı alınırken bir hata oluştu:", err);
-    } else {
-      const totalWords = result[0].total;
-      for (let i = 1; i <= totalWords; i++) {
-        const wordDetails = {
-          word_counter: 0,
-          user_id: userId,
-          word_id: i,
-        };
-        db.query(
-          "INSERT INTO worddetails SET ?",
-          wordDetails,
-          (err, result) => {
-            if (err) {
-              console.error("Word details eklenirken bir hata oluştu:", err);
-            } else {
-              console.log("Word details başarıyla eklendi:", result.insertId);
-            }
-          }
-        );
-      }
-    }
-  });
 }
+
 
 // Kullanıcının ayarlarını almak için endpoint
 app.get("/settings/:userId", (req, res) => {

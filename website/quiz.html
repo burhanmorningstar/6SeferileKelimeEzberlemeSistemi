@@ -4,19 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
+    
 </head>
 <body>
     <h1>Quiz</h1>
-    <div id="question-container">
-        <p>English: <span id="english"></span></p>
-        <p>Usage: <span id="usage"></span></p>
-        <img id="image" src="" alt="Image">
-        <audio id="audio" controls></audio>
-        <input type="text" id="answer" placeholder="Enter your answer">
-        <button id="submitBtn">Submit</button>
-    </div>
-    <div id="results">
-        <table id="results-table"></table>
+    <div id="question-container"></div>
+    <div class="modal fade modal-dialog-scrollable"  id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title " id="resultModalLabel" style="margin: auto;">Sonuçlar</h4>
+                    <button type="button" id="closeModalBtn" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped text-center">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Doğru</th>
+                                <th scope="col">Yanlış</th>
+                                <th scope="col">Pas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="correctAnswer">-</td>
+                                <td id="wrongAnswer">-</td>
+                                <td id="passAnswer">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Soru</th>
+                                <th scope="col">Kullanıcının Cevabı</th>
+                                <th scope="col">Doğru Cevap</th>
+                                <th scope="col">Doğru/Yanlış</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cevaplar-tablosu"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script/quiz.js"></script>
