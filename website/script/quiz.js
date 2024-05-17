@@ -1,13 +1,16 @@
 const wordApiUrl = "http://localhost:3001";
 const userApiUrl = "http://localhost:3000";
 
-const answerInput = document.getElementById("answer");
 
 let correctAnswers = [];
 let userAnswers = [];
 let questions = [];
+let resultQuestions = [];
+let correctAnswerCount = 0;
+let wrongAnswerCount = 0;
 let currentQuestionIndex = 0;
 let userId;
+const answerInput = document.getElementById("answer");
 
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -33,12 +36,8 @@ function fetchQuestions(userId) {
 
 function submitAnswer(wordId, userId) {
   const answer = answerInput.value.trim();
-  if (!answer) {
-    alert("Answer can't be empty.");
-    return;
-  }
-
   submitAnswerToApi(userId, wordId, answer);
+  answerInput.value = "";
 }
 
 async function submitAnswerToApi(userId, wordId, answer) {
@@ -56,10 +55,15 @@ async function submitAnswerToApi(userId, wordId, answer) {
     });
     const result = await response.json();
 
-    result.message === "Correct answer!"
-      ? console.log("Correct answer!")
-      : console.log("Incorrect answer.");
+    if (result.message === "Correct answer!") {
+      console.log("Correct answer!");
+      correctAnswerCount++;
+    } else {
+      console.log("Incorrect answer.");
+      wrongAnswerCount++;
+    }
     userAnswers.push(answer);
+    console.log("Kullanıcı cevapları:", userAnswers);
 
     showNextQuestion();
   } catch (error) {
@@ -80,11 +84,23 @@ function showNextQuestion() {
     updateHtml(null);
   }
 }
+const submitButton = document.getElementById("submitBtn");
+submitButton.addEventListener("click", () =>
+  submitAnswer(nextQuestion.word_id, nextQuestion.user_id)
+);
+
+answerInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    submitAnswer(nextQuestion.word_id, nextQuestion.user_id);
+  }
+});
 
 const updateHtml = (question) => {
   if (question) {
     const englishParagraph = document.getElementById("questionWord");
     englishParagraph.textContent = `${question.word}`;
+    resultQuestions.push(question.word);
+    correctAnswers.push(question.word_meaning);
 
     const usageParagraph = document.getElementById("questionSentence");
     usageParagraph.textContent = `${question.word_in_sentence}`;
@@ -95,37 +111,17 @@ const updateHtml = (question) => {
     const audioElement = document.getElementById("wordAudio");
     audioElement.src = question.word_voice;
 
-    const submitButton = document.getElementById("submitBtn");
-    submitButton.addEventListener("click", () =>
-      submitAnswer(question.word_id, question.user_id)
-    );
-
-    answerInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        submitAnswer(question.word_id, question.user_id);
-      }
-    });
   } else {
-    const resetButton = document.createElement("button");
-    resetButton.textContent = "Reset Quiz";
-    resetButton.id = "resetBtn";
-    resetButton.addEventListener("click", resetQuiz);
     showResults();
   }
 };
-
-function resetQuiz() {
-  correctAnswers = [];
-  userAnswers = [];
-  questions = [];
-  currentQuestionIndex = 0;
-  fetchQuestions(userId);
-}
+const closeModalBtn = document.getElementById("closeModalBtn");
+closeModalBtn.addEventListener("click", closeModal);
 
 function closeModal() {
   const modal = document.getElementById("resultModal");
-  modal.classList.remove("show");
   modal.style.display = "none";
+  modal.classList.remove("show");
 }
 
 var tbody = document.getElementById("cevaplar-tablosu");
@@ -133,29 +129,34 @@ var tbody = document.getElementById("cevaplar-tablosu");
 function showResults() {
   tbody.innerHTML = "";
 
-  for (var i = 0; i < questions.length; i++) {
+  const correctAnswerCountElement = document.getElementById("correctAnswer");
+  const wrongAnswerCountElement = document.getElementById("wrongAnswer");
+  correctAnswerCountElement.textContent = correctAnswerCount;
+  wrongAnswerCountElement.textContent = wrongAnswerCount;
+  for (var i = 0; i < resultQuestions.length; i++) {
     var tr = document.createElement("tr");
 
     var tdSoru = document.createElement("td");
-    tdSoru.textContent = questions[i].word;
+    tdSoru.textContent = resultQuestions[i];
     tr.appendChild(tdSoru);
 
     var tdKullaniciCevabi = document.createElement("td");
-    var kullaniciCevabi = userAnswers[i];
-    kullaniciCevabi == null ? (kullaniciCevabi = "") : kullaniciCevabi;
+    tdKullaniciCevabi.textContent = userAnswers[i];
     tr.appendChild(tdKullaniciCevabi);
 
     var tdDogruCevap = document.createElement("td");
-    tdDogruCevap.textContent = questions[i].correct_answer;
+    tdDogruCevap.textContent = correctAnswers[i];
     tr.appendChild(tdDogruCevap);
 
     var tdSonuc = document.createElement("td");
-    var questionCheck = checkAnswer(userAnswers[i], questions[i].correct_answer);
+    var questionCheck = checkAnswer(userAnswers[i], correctAnswers[i]);
     tdSonuc.textContent = questionCheck === 1 ? "Doğru" : "Yanlış";
 
     tr.appendChild(tdSonuc);
-
     tbody.appendChild(tr);
+    const modal = document.getElementById("resultModal");
+    modal.style.display = "block";
+    modal.classList.add("show");
   }
 }
 
