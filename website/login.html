@@ -1,42 +1,58 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 
 <head>
-    <title>Login</title>
-    <!-- Required meta tags -->
+    <title>Kullanıcı Girişi</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Kullanıcı hesabınıza giriş yapın" />
+    <meta name="keywords" content="giriş, erişim, kullanıcı, hesap" />
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;">
 
-    <!-- Bootstrap CSS v5.3.2 -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/login.css">
+
 </head>
 
 <body>
 
-    <div class="container d-grid ">
-        <div class="row ">
+    <div class="wrapper d-grid">
+        <div class="row">
             <div class="col-md-6 d-flex align-items-center justify-content-center flex-column">
-                <h1 class="text-center text-white">Login</h1>
                 <form action="" method="post" id="form">
+                    <h1 class="text-center text-white">GİRİŞ YAP</h1>
                     <div class="form-group">
-                        <label for="user_email_address" class="text-white">Email Address</label>
+                        <label for="user_email_address">E-posta Adresi</label>
                         <input type="email" name="user_email_address" id="user_email_address" class="form-control"
-                            required>
+                            required aria-required="true" aria-label="E-posta Adresi">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+
                     </div>
                     <div class="form-group">
-                        <label for="password" class="text-white">Password</label>
+                        <label for="user_password" class="text-white">Şifre</label>
                         <input type="password" name="user_password" id="user_password" class="form-control"
-                            autocomplete="password" required>
+                            autocomplete="password" required aria-required="true" aria-label="Şifre">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
                     </div>
-                    <button type="submit" id="loginSubmitBtn" class="btn">Submit</button>
-                    <button type="button" id="resetPasswordBtn" class="btn" href="resetPassword.html">Şifremi
-                        Unuttum</button>
+                    <div class="remember-forgot">
+                        <a href="resetPassword.html">Şifremi Unuttum</a>
+                    </div>
+                    <button type="submit" id="loginSubmitBtn" aria-label="Giriş Formunu Gönder">Gönder</button>
+                    <div class="register-link">
+                        <p>Hesabınız yok mu? <a href="signup.html">Kayıt Ol</a></p>
+                    </div>
                 </form>
             </div>
             <div class="col-md-6 d-flex align-items-center justify-content-center">
-                <img class="m-auto" src="images/image-removebg-preview (2).png" alt="login">
+                <img class="m-auto" src="images/image-removebg-preview (2).png" alt="Giriş Yap İllüstrasyonu"
+                    loading="lazy">
             </div>
         </div>
     </div>
