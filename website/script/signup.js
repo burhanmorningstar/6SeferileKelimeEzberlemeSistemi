@@ -1,5 +1,5 @@
 const apiUrl = "http://localhost:3000";
-const registerForm = document.getElementById("registerForm");
+const registerForm = document.getElementById("form");
 
 registerForm.addEventListener('submit', async (event) =>{
   event.preventDefault();
