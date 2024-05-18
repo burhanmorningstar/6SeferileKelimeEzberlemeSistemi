@@ -26,32 +26,38 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/save-settings', (req, res) => {
     const { wordLimit, wordDate, userId } = req.body;
 
-    const query = 'UPDATE settings SET word_limit = ?, next_ask_date = ? WHERE user_id = ?';
-    db.query(query, [wordLimit, wordDate, userId], (err, result) => {
+    const query = 'SELECT * FROM settings WHERE user_id = ?';
+    db.query(query, [userId], (err, result) => {
         if (err) {
-            console.error('Ayarlar kaydedilirken bir hata oluştu:', err);
-            return res.status(500).send('Ayarlar kaydedilirken bir hata oluştu.');
+            console.error('Ayarlar alınırken bir hata oluştu:', err);
+            return res.status(500).send('Ayarlar alınırken bir hata oluştu.');
         }
-        res.status(200).send('Ayarlar başarıyla kaydedildi.');
+
+        if (result.length > 0) {
+            // Kullanıcıya ait ayarlar zaten var, güncelleme yap
+            const updateQuery = 'UPDATE settings SET word_limit = ?, next_ask_date = ? WHERE user_id = ?';
+            db.query(updateQuery, [wordLimit, wordDate, userId], (err, result) => {
+                if (err) {
+                    console.error('Ayarlar güncellenirken bir hata oluştu:', err);
+                    return res.status(500).send('Ayarlar güncellenirken bir hata oluştu.');
+                }
+                res.status(200).send('Ayarlar başarıyla güncellendi.');
+            });
+        } else {
+            // Kullanıcıya ait ayarlar yok, ekle
+            const insertQuery = 'INSERT INTO settings (user_id, word_limit, next_ask_date) VALUES (?, ?, ?)';
+            db.query(insertQuery, [userId, wordLimit, wordDate], (err, result) => {
+                if (err) {
+                    console.error('Ayarlar eklenirken bir hata oluştu:', err);
+                    return res.status(500).send('Ayarlar eklenirken bir hata oluştu.');
+                }
+                res.status(200).send('Ayarlar başarıyla eklendi.');
+            });
+        }
     });
 });
 
-// Analiz raporu alma
-app.get('/get-analysis', (req, res) => {
-    const query = `
-        SELECT COUNT(*) as totalWords,
-               SUM(success) / COUNT(*) * 100 as successPercentage
-        FROM words
-        WHERE user_id = 1
-    `;
-    db.query(query, (err, result) => {
-        if (err) {
-            console.error('Analiz raporu alınırken bir hata oluştu:', err);
-            return res.status(500).send('Analiz raporu alınırken bir hata oluştu.');
-        }
-        res.status(200).json(result[0]);
-    });
-});
+
 
 app.listen(port, () => {
     console.log(`Sunucu ${port} portunda çalışıyor...`);
