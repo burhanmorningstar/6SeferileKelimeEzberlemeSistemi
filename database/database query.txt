@@ -1,3 +1,5 @@
+CREATE DATABASE 6kelimetekrar;
+
 CREATE TABLE users (
   user_id INT AUTO_INCREMENT PRIMARY KEY,
   user_password VARCHAR(255),

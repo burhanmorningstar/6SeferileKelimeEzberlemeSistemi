@@ -12,7 +12,7 @@ def main():
     input_file_path = "input.txt"
     output_file_path = "output.txt"
 
-    with open(input_file_path, 'r', encoding='utf-8') as file:
+    with open(input_file_path, 'w+', encoding='utf-8') as file:
         for line in file:
             kelime, anlami, cumleicinde, gorsel, ses = line.strip().split('-')
             gorsel = "\"" + gorsel + "\"" 
