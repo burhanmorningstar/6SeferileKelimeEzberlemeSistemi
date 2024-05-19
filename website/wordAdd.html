@@ -1,3 +1,1001 @@
+miugurlu
+miugurlu
+Rahatsız Etmeyin
+
+burhan — 29.12.2023 17:58
+import java.io.;
+import java.util.Scanner;
+
+public class Film extends Medya {
+    /Film(){
+        System.out.println("Film Sınıfı Çalıştı");
+    }*/
+    private static final String FİLM_ADI = "Filmler.txt";
+    private static final String FİLM_YORUM_ADI = "yorumlar.txt";
+
+    public void filmEkle() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Film adını giriniz:");
+        isim = sc.nextLine();
+        System.out.println("Yönetmeni giriniz:");
+        yonetmen = sc.nextLine();
+        System.out.println("Yılını giriniz:");
+        cikisYili = sc.nextInt();
+        sc.nextLine();
+
+        try (FileWriter writer = new FileWriter(FİLM_ADI, true)) {
+            writer.write(isim + " | " + yonetmen + " | " + cikisYili + "\n");
+            System.out.println("Film başarıyla eklendi.");
+        } catch (IOException e) {
+            System.err.println("Film eklerken bir hata oluştu.");
+            e.printStackTrace();
+        }
+    }
+
+    public void filmleriListele() {
+
+        try (Scanner scanner = new Scanner(new File(FİLM_ADI))) {
+            while (scanner.hasNextLine()) {
+                String satir = scanner.nextLine();
+                System.out.println(satir);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Film dosyası bulunamadı.");
+            e.printStackTrace();
+        }
+    }
+    public static void filmYorumlarınıGoster(String arananFilm) {
+        try {
+            Scanner sc = new Scanner(new File(FİLM_YORUM_ADI));
+            while (sc.hasNextLine()) {
+                String satir = sc.nextLine();
+                String[] satirElemanlari = satir.strip().split("\|");
+                if (satirElemanlari.length > 0 && satirElemanlari[0].strip().toLowerCase().equals(arananFilm.toLowerCase())) {
+                    System.out.println(arananFilm + " için yorumlar: " + satirElemanlari[1].strip());
+                    return;
+                }
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(FİLM_YORUM_ADI + " dosya bulunamadı.");
+        } catch (Exception e) {
+            System.out.println("bir hata oluştu: " + e.getMessage());
+        }
+    }
+}
+kullanıcı sınıfı
+import java.io.;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Kullanici {
+    /Kullanici(){
+        System.out.println("Kullanıcı sınıfı çalıştı");
+    }*/
+    private static final String DOSYA_ADI = "kullanicilar.txt";
+    public boolean girisYap(String id, String parola) {
+        try (Scanner scanner = new Scanner(new File(DOSYA_ADI))) {
+            while (scanner.hasNextLine()) {
+                String satir = scanner.nextLine();
+                String[] bilgiler = satir.split(" \| ");
+                if (bilgiler.length == 2 && bilgiler[0].equals(id) && bilgiler[1].equals(parola)) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Kullanıcı dosyası bulunamadı.");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean kayitOl(String id, String parola) {
+        try {
+            if (id.contains(" ") || parola.contains(" ")) {
+                throw new YanlisGirdiHatasi("Kullanıcı adı veya parola boşluk içeremez.");
+            }
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(DOSYA_ADI, true))) {
+                writer.println(id + " | " + parola);
+                return true;
+            }
+        } catch (IOException e) {
+            System.err.println("Kayıt sırasında bir hata oluştu.");
+            e.printStackTrace();
+            return false;
+        } catch (YanlisGirdiHatasi e) {
+            System.err.println("Hata: " + e.getMessage());
+            return false;
+        }
+    }
+
+    class YanlisGirdiHatasi extends Exception {
+        public YanlisGirdiHatasi(String message) {
+            super(message);
+        }
+    }
+    static class ProfilBilgisi {
+        public static Map<String, String> kullaniciVerileriniOku() {
+            Map<String, String> kullaniciVerileri = new HashMap<>();
+
+            try (Scanner scanner = new Scanner(new File(DOSYA_ADI))) {
+                while (scanner.hasNextLine()) {
+                    String satir = scanner.nextLine();
+                    String[] bilgiler = satir.split(" \| ");
+
+                    if (bilgiler.length == 2) {
+                        kullaniciVerileri.put(bilgiler[0], bilgiler[1]);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return kullaniciVerileri;
+        }
+
+        public static void kullaniciVerileriniYaz(Map<String, String> kullaniciVerileri) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(DOSYA_ADI))) {
+                for (Map.Entry<String, String> entry : kullaniciVerileri.entrySet()) {
+                    writer.println(entry.getKey() + " | " + entry.getValue());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        public static void profilBilgisiDuzenleme(){
+            Scanner sc = new Scanner(System.in);
+            Map<String, String> kullaniciBilgileri = Kullanici.ProfilBilgisi.kullaniciVerileriniOku();
+            System.out.print("Yeni Kullanıcı Adı: ");
+            String yeniKullaniciAdi = sc.nextLine();
+            System.out.print("Yeni Parola: ");
+            String yeniParola = sc.nextLine();
+
+            kullaniciBilgileri.put(yeniKullaniciAdi, yeniParola);
+            Kullanici.ProfilBilgisi.kullaniciVerileriniYaz(kullaniciBilgileri);
+
+            System.out.println("Kullanıcı bilgileri başarıyla güncellendi.");
+        }
+    }
+}
+medya sınıfı
+abstract class Medya{
+    /Medya(){
+        System.out.println("Medya sınıfı çalıştı");
+    }/
+    protected String isim;
+    protected String yonetmen;
+    protected int cikisYili;
+}
+yorumlar sınıfı
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Yorumlar {
+    /Yorumlar(){
+        System.out.println("Yorumlar sınıfı çalıştı.");
+    }/
+    private String isim= null,yorum=null;
+    private final String FİLM_YORUM_ADI = "yorumlar.txt";
+    private final String DİZİ_YORUM_ADI = "diziyorumları.txt";
+    public void filmYorumEkle() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Film adını giriniz:");
+        isim = sc.nextLine();
+        System.out.println("Yorumunuzu giriniz:");
+        yorum = sc.nextLine();
+        try (FileWriter writer = new FileWriter("yorumlar.txt", true)) {
+            writer.write(isim + " | " + yorum + "\n");
+            System.out.println("Yorum başarıyla eklendi.");
+        } catch (IOException e) {
+            System.err.println("Yorum eklerken bir hata oluştu.");
+            e.printStackTrace();
+        }
+    }
+    public void filmYorumlariListele() {
+
+        try (Scanner scanner = new Scanner(new File(FİLM_YORUM_ADI))) {
+            while (scanner.hasNextLine()) {
+                String satir = scanner.nextLine();
+                System.out.println(satir);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Yorum dosyası bulunamadı.");
+            e.printStackTrace();
+        }
+    }
+    public void diziYorumEkle() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Dizi adını giriniz:");
+        isim = sc.nextLine();
+        System.out.println("Yorumunuzu giriniz:");
+        yorum = sc.nextLine();
+        try (FileWriter writer = new FileWriter("diziyorumlari.txt", true)) {
+            writer.write(isim + " | " + yorum + "\n");
+            System.out.println("Yorum başarıyla eklendi.");
+        } catch (IOException e) {
+            System.err.println("Yorum eklerken bir hata oluştu.");
+            e.printStackTrace();
+        }
+    }
+    public void diziYorumlariListele() {
+
+        try (Scanner scanner = new Scanner(new File(DİZİ_YORUM_ADI))) {
+            while (scanner.hasNextLine()) {
+                String satir = scanner.nextLine();
+                System.out.println(satir);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Yorum dosyası bulunamadı.");
+            e.printStackTrace();
+        }
+    }
+}
+dizi sınıfı
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Dizi extends Medya{
+    /Dizi(){
+        System.out.println("Dizi sınıfı çalıştı");
+    }/
+    private static final String DİZİ_ADI = "diziler.txt";
+    private static final String DİZİ_YORUM_ADI = "diziyorumlari.txt";
+
+    public void diziEkle() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Dizi adını giriniz:");
+        isim = sc.nextLine();
+        System.out.println("Sezon sayısı giriniz:");
+        int sezonSayisi = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Bölüm sayısını giriniz:");
+        int bolumSayisi = sc.nextInt();
+        sc.nextLine();
+
+        try (FileWriter writer = new FileWriter(DİZİ_ADI, true)) {
+            writer.write(isim + " | " + sezonSayisi + " | " + bolumSayisi + "\n");
+            System.out.println("Dizi başarıyla eklendi.");
+        } catch (IOException e) {
+            System.err.println("Dizi eklerken bir hata oluştu.");
+            e.printStackTrace();
+        }
+    }
+
+    public void dizileriListele() {
+
+        try (Scanner scanner = new Scanner(new File(DİZİ_ADI))) {
+            while (scanner.hasNextLine()) {
+                String satir = scanner.nextLine();
+                System.out.println(satir);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Dizi dosyası bulunamadı.");
+            e.printStackTrace();
+        }
+    }
+    public static void diziYorumlarınıGoster(String arananDizi) {
+        try {
+            Scanner sc = new Scanner(new File(DİZİ_YORUM_ADI));
+            while (sc.hasNextLine()) {
+                String satir = sc.nextLine();
+                String[] satirElemanlari = satir.strip().split("\|");
+                if (satirElemanlari.length > 0 && satirElemanlari[0].strip().toLowerCase().equals(arananDizi.toLowerCase())) {
+                    System.out.println(arananDizi + " için yorumlar: " + satirElemanlari[1].strip());
+                    return;
+                }
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(DİZİ_YORUM_ADI + " dosya bulunamadı.");
+        } catch (Exception e) {
+            System.out.println("bir hata oluştu: " + e.getMessage());
+        }
+    }
+}
+burhan — 29.12.2023 18:10
+diziyorumları.txt
+The Witcher | İnanılmaz bir dünya ve karakter derinliği. Kitapları sevenler için bir zorunluluk.
+Black Mirror | Teknolojinin etkilerini karanlık bir perspektiften gösteriyor. Kafa karıştırıcı ve düşündürücü.
+The Mandalorian | Star Wars evrenine getirdiği taze soluk ve Baby Yoda'nın sevimliliğiyle büyüleyici.
+Westworld | Zekice yazılmış bir bilim kurgu dizisi. İnsan yapımı varlıkların karmaşık hikayesi etkileyici.
+Breaking Bad | Bryan Cranston ve Aaron Paul'un oyunculukları efsanevi. Hikaye sürekli sürprizlerle dolu.
+Stranger Things | 80'lerin nostaljisini ve çocukların macera dolu dünyasını başarıyla yansıtıyor.
+Game of Thrones | Büyüleyici bir fantastik dünya, ancak final sezonu hayranları ikiye böldü.
+The Crown | Kraliyet ailesinin dramını etkileyici bir şekilde anlatıyor. Tarihi sevenler için ideal.
+Dark | Zaman yolculuğunu başarılı bir şekilde işleyen karmaşık bir Alman bilim kurgu dizisi.
+Money Heist | İzleyiciyi soygunun içine çeken ve karakterler arasındaki dinamikleri başarıyla işleyen bir yapım.
+diziler.txt
+The Witcher | 2 | 16
+Black Mirror | 5 | 22
+The Mandalorian | 2 | 16
+Westworld | 3 | 28
+Breaking Bad | 5 | 62
+Stranger Things | 4 | 33
+Game of Thrones | 8 | 73
+The Crown | 4 | 40
+Dark | 3 | 26
+Money Heist | 5 | 41
+burhan — 29.12.2023 19:05
+dosyaYazdır  fonksiyon
+(String isim,String Yönetmen,int cikisYili)
+burhan — 29.12.2023 19:22
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class DosyaYazmaIslemleri {
+
+    // Dosyaya veri yazma metodu
+    public static void dosyayaYaz(String dosyaAdi, String veri) {
+        try (FileWriter writer = new FileWriter(dosyaAdi, true)) {
+            // true parametresi ile dosyanın sonuna ekleme yapılacağını belirtiyoruz
+            writer.write(veri + "\n"); // Veriyi dosyaya yaz
+            System.out.println("Veri başarıyla dosyaya yazıldı.");
+        } catch (IOException e) {
+            System.err.println("Dosyaya yazma işleminde bir hata oluştu.");
+            e.printStackTrace();
+        }
+    }
+miugurlu — 02.01.2024 15:46
+/*import java.util.InputMismatchException;
+import java.util.Scanner;
+
+class AsalDurum extends Exception {
+    public AsalDurum(String message) {
+        super(message);
+    }
+}
+
+public class AsalSayiKontrol {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean gecerliGiris = false;
+
+        while (!gecerliGiris) {
+            try {
+                System.out.println("Bir sayı girin:");
+                int sayi = okunanSayiAl(scanner);
+
+                if (sayi < 0) {
+                    throw new AsalDurum("Negatif sayılar asal değildir.");
+                }
+
+                if (asalMi(sayi)) {
+                    System.out.println(sayi + " bir asal sayıdır.");
+                } else {
+                    System.out.println(sayi + " bir asal sayı değildir.");
+                }
+
+                gecerliGiris = true;
+            } catch (AsalDurum e) {
+                System.err.println("Hata: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Program sonlandırıldı.");
+    }
+
+    private static int okunanSayiAl(Scanner scanner) throws AsalDurum {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            throw new AsalDurum("Geçersiz giriş. Sayı haricinde bir değer girdiniz.");
+        } finally {
+            scanner.nextLine();
+        }
+    }
+
+    private static boolean asalMi(int sayi) {
+        if (sayi < 2) {
+            return false;
+        }
+
+        for (int i = 2; i <= Math.sqrt(sayi); i++) {
+            if (sayi % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+*/
+asal sayı işi
+import java.util.Scanner;
+
+public class UcgenHesap {
+    public static void main(String[] args) {
+        int cevre;
+        int u;
+
+        Scanner sc = new Scanner(System.in);
+
+        boolean gecerliGirdi = false;
+
+        do {
+            try {
+                System.out.print("Kenar 1:");
+                int kenar1 = sc.nextInt();
+
+                System.out.print("Kenar 2:");
+                int kenar2 = sc.nextInt();
+
+                System.out.print("Kenar 3:");
+                int kenar3 = sc.nextInt();
+
+                ucgenKontrol(kenar1, kenar2, kenar3);
+                System.out.println("Bu kenar uzunluklarıyla bir üçgen oluşturulabilir.");
+
+                cevre = kenar1 + kenar2 + kenar3;
+                u = cevre / 2;
+                double alan = Math.sqrt(u * (u - kenar1) * (u - kenar2) * (u - kenar3));
+
+                System.out.println("Alan=" + alan);
+                System.out.println("Çevre=" + cevre);
+
+                gecerliGirdi = true;
+            } catch (IllegalArgumentException e) {
+                System.err.println("Hata: " + e.getMessage());
+                System.out.println("--------------");
+                sc.nextLine();
+            }
+        } while (!gecerliGirdi);
+    }
+
+    private static void ucgenKontrol(int kenar1, int kenar2, int kenar3) {
+        if (kenar1 <= 0  kenar2 <= 0  kenar3 <= 0) {
+            throw new IllegalArgumentException("Kenar uzunlukları pozitif olmalıdır.");
+        }
+
+        if (!(kenar1 + kenar2 > kenar3 && kenar1 + kenar3 > kenar2 && kenar2 + kenar3 > kenar1)) {
+            throw new IllegalArgumentException("Bu kenar uzunluklarıyla bir üçgen oluşturulamaz.");
+        }
+    }
+}
+üçgen işi
+burhan — 08.01.2024 01:13
+bunlar ne hoca
+burhan — 04.04.2024 14:11
+CoolOyunİsmi#TR1
+burhan — 01.05.2024 16:52
+Ek dosya türü: acrobat
+deneme.java_database_diagram.pdf
+189.00 KB
+burhan — 17.05.2024 21:24
+sa
+as
+burhan
+, 9 dakika süren bir arama başlattı.
+ — 17.05.2024 21:24
+burhan — 17.05.2024 21:26
+api dosyasinin icinde wordAddapi.js dosyasi vae onun icine atcan atacagim kodlari
+burhan
+, bir saat süren bir arama başlattı.
+ — dün 00:16
+miugurlu — dün 00:42
+Table musteri_temsilcisi{
+  musteri_temsilcisi_no integer [primary key]
+  musteri_temsilcisi_ad_soyad varchar
+  gorusme_no integer
+  itiraz_no integer
+  prim_no integer
+  sicil_no varchar(255)
+}
+
+Table takim_lideri{
+  takim_lideri_no integer [primary key]
+  takim_lideri_ad_soyad varchar
+  sicil_no varchar(255)
+}
+
+Table grup_yoneticisi{
+  grup_yoneticisi_no integer [primary key]
+  grup_yöneticisi_ad_soyad varchar
+  sicil_no varchar(255)
+
+}
+
+Table gorusme {
+  gorusme_no integer [primary key]
+  musteri_id integer
+  müsteri_ad_soyad varchar
+  gorusme_konusu varchar
+  gorusme_tarihi date
+  gorusme_baslama_saati time
+  gorusme_bitis_saati time
+  gorusme_durum varchar
+}
+
+Table itirazlar{
+  itiraz_no integer [primary key]
+  temsilci_no integer
+  temsilci_ad_soyad varchar
+  itiraz_aciklamasi varchar
+  itiraz_tarihi date
+
+}
+
+Table primler{
+  prim_no integer [primary key]
+  prim_miktari integer
+  prim_tarihi date
+}
+
+Table giris_bilgileri{
+  giris_id integer [primary key]
+  sifre varchar(255)
+  sicil_no varchar(255)
+}
+
+
+
+
+Ref: "musteri_temsilcisi"."itiraz_no" < "itirazlar"."itiraz_no"
+
+Ref: "musteri_temsilcisi"."gorusme_no" < "gorusme"."gorusme_no"
+
+Ref: "musteri_temsilcisi"."prim_no" < "primler"."prim_no"
+
+Ref: "giris_bilgileri"."sicil_no" < "grup_yoneticisi"."sicil_no"
+
+Ref: "giris_bilgileri"."sicil_no" < "takim_lideri"."sicil_no"
+
+Ref: "giris_bilgileri"."sicil_no" < "musteri_temsilcisi"."sicil_no"
+burhan — dün 00:55
+asdqweqwe
+CREATE TABLE musteri_temsilcisi (
+  musteri_temsilcisi_no INTEGER PRIMARY KEY,
+  musteri_temsilcisi_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE takim_lideri (
+  takim_lideri_no INTEGER PRIMARY KEY,
+  takim_lideri_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE grup_yoneticisi (
+  grup_yoneticisi_no INTEGER PRIMARY KEY,
+  grup_yoneticisi_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE gorusme (
+  gorusme_no INTEGER PRIMARY KEY,
+  musteri_temsilcisi_no INTEGER,
+  musteri_id INTEGER,
+  musteri_ad_soyad VARCHAR(255),
+  gorusme_konusu VARCHAR(255),
+  gorusme_tarihi DATE,
+  gorusme_baslama_saati TIME,
+  gorusme_bitis_saati TIME,
+  gorusme_durum VARCHAR(255),
+  FOREIGN KEY (musteri_temsilcisi_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE itirazlar (
+  itiraz_no INTEGER PRIMARY KEY,
+  temsilci_no INTEGER,
+  itiraz_aciklamasi VARCHAR(255),
+  itiraz_tarihi DATE,
+  FOREIGN KEY (temsilci_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE primler (
+  prim_no INTEGER PRIMARY KEY,
+  prim_miktari INTEGER,
+  prim_tarihi DATE,
+  musteri_temsilcisi_no INTEGER,
+  FOREIGN KEY (musteri_temsilcisi_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE takim_lideri_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES takim_lideri(sicil_no)
+);
+
+CREATE TABLE grup_yoneticisi_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES grup_yoneticisi(sicil_no)
+);
+
+CREATE TABLE musteri_temsilcisi_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES musteri_temsilcisi(sicil_no)
+);
+CREATE TABLE musteri_temsilcisi (
+  musteri_temsilcisi_no INTEGER PRIMARY KEY,
+  musteri_temsilcisi_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE takim_lideri (
+  takim_lideri_no INTEGER PRIMARY KEY,
+  takim_lideri_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE grup_yoneticisi (
+  grup_yoneticisi_no INTEGER PRIMARY KEY,
+  grup_yoneticisi_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+
+CREATE TABLE gorusme (
+  gorusme_no INTEGER PRIMARY KEY,
+  musteri_temsilcisi_no INTEGER,
+  musteri_id INTEGER,
+  musteri_ad_soyad VARCHAR(255),
+  gorusme_konusu VARCHAR(255),
+  gorusme_tarihi DATE,
+  gorusme_baslama_saati TIME,
+  gorusme_bitis_saati TIME,
+  gorusme_durum VARCHAR(255),
+  FOREIGN KEY (musteri_temsilcisi_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE itirazlar (
+  itiraz_no INTEGER PRIMARY KEY,
+  temsilci_no INTEGER,
+  itiraz_aciklamasi VARCHAR(255),
+  itiraz_tarihi DATE,
+  FOREIGN KEY (temsilci_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE primler (
+  prim_no INTEGER PRIMARY KEY,
+  prim_miktari INTEGER,
+  prim_tarihi DATE,
+  musteri_temsilcisi_no INTEGER,
+  FOREIGN KEY (musteri_temsilcisi_no) REFERENCES musteri_temsilcisi(musteri_temsilcisi_no)
+);
+
+CREATE TABLE takim_lideri_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES takim_lideri(sicil_no)
+);
+
+CREATE TABLE grup_yoneticisi_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES grup_yoneticisi(sicil_no)
+);
+
+CREATE TABLE musteri_temsilcisi_giris_bilgileri (
+  giris_id INTEGER PRIMARY KEY,
+  sifre VARCHAR(255),
+  sicil_no VARCHAR(255),
+  FOREIGN KEY (sicil_no) REFERENCES musteri_temsilcisi(sicil_no)
+);
+qweasd
+qweasd
+ 
+-- Öncelikle bağımsız tabloları oluşturun
+CREATE TABLE musteri_temsilcisi (
+  musteri_temsilcisi_no INTEGER PRIMARY KEY,
+  musteri_temsilcisi_ad_soyad VARCHAR(255),
+  sicil_no VARCHAR(255)
+);
+Genişlet
+message.txt
+3 KB
+burhan — dün 01:20
+Table musteri_temsilcisi {
+  musteri_temsilcisi_no int [pk]
+  musteri_temsilcisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table takim_lideri {
+  takim_lideri_no int [pk]
+  takim_lideri_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table grup_yoneticisi {
+  grup_yoneticisi_no int [pk]
+  grup_yoneticisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table gorusme {
+  gorusme_no int [pk]
+  musteri_temsilcisi_no int
+  musteri_id int
+  musteri_ad_soyad varchar(255)
+  gorusme_konusu varchar(255)
+  gorusme_tarihi date
+  gorusme_baslama_saati time
+  gorusme_bitis_saati time
+  gorusme_durum varchar(255)
+
+  Foreign Key (musteri_temsilcisi_no) References musteri_temsilcisi(musteri_temsilcisi_no)
+}
+
+Table itirazlar {
+  itiraz_no int [pk]
+  temsilci_no int
+  itiraz_aciklamasi varchar(255)
+  itiraz_tarihi date
+
+  Foreign Key (temsilci_no) References musteri_temsilcisi(musteri_temsilcisi_no)
+}
+
+Table primler {
+  prim_no int [pk]
+  prim_miktari int
+  prim_tarihi date
+  musteri_temsilcisi_no int
+
+  Foreign Key (musteri_temsilcisi_no) References musteri_temsilcisi(musteri_temsilcisi_no)
+}
+
+Table takim_lideri_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Foreign Key (sicil_no) References takim_lideri(sicil_no)
+}
+
+Table grup_yoneticisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Foreign Key (sicil_no) References grup_yoneticisi(sicil_no)
+}
+
+Table musteri_temsilcisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Foreign Key (sicil_no) References musteri_temsilcisi(sicil_no)
+}
+asdqwe
+Table musteri_temsilcisi {
+  musteri_temsilcisi_no int [pk]
+  musteri_temsilcisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table takim_lideri {
+  takim_lideri_no int [pk]
+  takim_lideri_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table grup_yoneticisi {
+  grup_yoneticisi_no int [pk]
+  grup_yoneticisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table gorusme {
+  gorusme_no int [pk]
+  musteri_temsilcisi_no int
+  musteri_id int
+  musteri_ad_soyad varchar(255)
+  gorusme_konusu varchar(255)
+  gorusme_tarihi date
+  gorusme_baslama_saati time
+  gorusme_bitis_saati time
+  gorusme_durum varchar(255)
+
+  Ref: < museri_temsilcisi_no > musteri_temsilcisi.musteri_temsilcisi_no
+}
+
+Table itirazlar {
+  itiraz_no int [pk]
+  temsilci_no int
+  itiraz_aciklamasi varchar(255)
+  itiraz_tarihi date
+
+  Ref: < temsilci_no > musteri_temsilcisi.musteri_temsilcisi_no
+}
+
+Table primler {
+  prim_no int [pk]
+  prim_miktari int
+  prim_tarihi date
+  musteri_temsilcisi_no int
+
+  Ref: < musteri_temsilcisi_no > musteri_temsilcisi.musteri_temsilcisi_no
+}
+
+Table takim_lideri_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Ref: < sicil_no > takim_lideri.sicil_no
+}
+
+Table grup_yoneticisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Ref: < sicil_no > grup_yoneticisi.sicil_no
+}
+
+Table musteri_temsilcisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+
+  Ref: < sicil_no > musteri_temsilcisi.sicil_no
+}
+asdawedifnosaifj9sjd
+widbosdj
+8whrpdj
+Table musteri_temsilcisi {
+  musteri_temsilcisi_no int [pk]
+  musteri_temsilcisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table takim_lideri {
+  takim_lideri_no int [pk]
+  takim_lideri_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table grup_yoneticisi {
+  grup_yoneticisi_no int [pk]
+  grup_yoneticisi_ad_soyad varchar(255)
+  sicil_no varchar(255)
+}
+
+Table gorusme {
+  gorusme_no int [pk]
+  musteri_temsilcisi_no int
+  musteri_id int
+  musteri_ad_soyad varchar(255)
+  gorusme_konusu varchar(255)
+  gorusme_tarihi date
+  gorusme_baslama_saati time
+  gorusme_bitis_saati time
+  gorusme_durum varchar(255)
+}
+
+Ref: "musteri_temsilcisi"."gorusme_no" < "gorusme"."gorusme_no"
+
+Table itirazlar {
+  itiraz_no int [pk]
+  temsilci_no int
+  itiraz_aciklamasi varchar(255)
+  itiraz_tarihi date
+}
+
+Ref: "musteri_temsilcisi"."itiraz_no" < "itirazlar"."itiraz_no"
+
+Table primler {
+  prim_no int [pk]
+  prim_miktari int
+  prim_tarihi date
+  musteri_temsilcisi_no int
+}
+
+Ref: "musteri_temsilcisi"."prim_no" < "primler"."prim_no"
+
+Table takim_lideri_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+}
+
+Ref: "giris_bilgileri"."sicil_no" < "takim_lideri"."sicil_no"
+
+Table grup_yoneticisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+}
+
+Ref: "giris_bilgileri"."sicil_no" < "grup_yoneticisi"."sicil_no"
+
+Table musteri_temsilcisi_giris_bilgileri {
+  giris_id int [pk]
+  sifre varchar(255)
+  sicil_no varchar(255)
+}
+
+Ref: "giris_bilgileri"."sicil_no" < "musteri_temsilcisi"."sicil_no"
+asd
+burhan — bugün saat 00:58
+word.js dosyası
+const form = document.querySelector('form');
+const apiUrl = "http://localhost:3002/";
+
+form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const englishWord = document.getElementById('englishWord').value;
+    const turkishWord = document.getElementById('turkishWord').value;
+    const wordImage = document.getElementById('wordImage').files[0];
+    const wordAudio = document.getElementById('wordAudio').files[0];
+    const wordSentence = document.getElementById('wordSentence').value;
+
+    const formData = new FormData();
+    formData.append('wordMeaning', turkishWord);
+    formData.append('word', englishWord);
+    formData.append('wordImage', wordImage);
+    formData.append('wordAudio', wordAudio);
+    formData.append('wordSentence', wordSentence);
+
+    try {
+        const response = await fetch(apiUrl + '/add-word', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            alert('Kelime başarıyla eklendi.');
+            // İsteği gönderdikten sonra formu temizle
+            form.reset();
+            // Önizleme resmini gizle
+            document.getElementById('imagePreview').classList.add('d-none');
+            // Ses öğesini gizle
+            const audioPreview = document.getElementById('audioPreview');
+            audioPreview.classList.add('d-none');
+            // Ses dosyasını temizle
+            audioPreview.src = '';
+        } else {
+            throw new Error('Kelime eklenirken bir hata oluştu.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Kelime eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+    }
+});
+wordAddApi.js dosyası
+const express = require('express');
+const multer = require('multer');
+const mysql = require('mysql');
+const path = require('path');
+const cors = require('cors');
+const fs = require('fs');
+Genişlet
+message.txt
+4 KB
+wordAdd.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+Genişlet
+message.txt
+4 KB
+bunları direkt bu şekilde koy gocunma hiç cayır cayır çalışıyor
+﻿
+burhan
+geirenfare
+🐐
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,26 +1063,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"
         integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        document.getElementById('wordImage').addEventListener('change', function (event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var img = document.getElementById('imagePreview');
-                img.src = reader.result;
-                img.classList.remove('d-none');
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        });
-        document.getElementById('wordAudio').addEventListener('change', function (event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var audio = document.getElementById('audioPreview');
-                var source = document.getElementById('audioSource');
-                source.src = reader.result;
-                audio.load();
-                audio.classList.remove('d-none');
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        });
     </script>
+    <script src="script/word.js"></script>
 </body>
+message.txt
+4 KB
