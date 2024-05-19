@@ -1,53 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ayarlar</title>
-</head>
-<body>
+  </head>
+  <body>
     <form id="settingsForm">
-        <label for="wordLimitSetting">Ekrana Kaç Kelime çıksın</label>
-        <select name="wordLimitSetting" id="wordLimitSetting">
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-        </select>
+      <label for="wordLimitSetting">Ekrana Kaç Kelime çıksın</label>
+      <select name="wordLimitSetting" id="wordLimitSetting">
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+      </select>
 
-        <label for="wordDateSetting">Zaman Aralığı Seçiniz</label>
-        <select name="wordDateSetting" id="wordDateSetting">
-            <option value="1day">1 gün sonra</option>
-            <option value="7days">1 hafta sonra</option>
-            <option value="1month">1 ay sonra</option>
-            <option value="3months">3 ay sonra</option>
-            <option value="6months">6 ay sonra</option>
-            <option value="1year">1 yıl sonra</option>
-        </select>
-        
-        <input type="submit" value="Uygula">
+      <label for="wordDateSetting">Zaman Aralığı Seçiniz</label>
+      <select name="wordDateSetting" id="wordDateSetting">
+        <option value="1day">1 gün sonra</option>
+        <option value="7days">1 hafta sonra</option>
+        <option value="1month">1 ay sonra</option>
+        <option value="3months">3 ay sonra</option>
+        <option value="6months">6 ay sonra</option>
+        <option value="1year">1 yıl sonra</option>
+      </select>
+
+      <input type="submit" value="Uygula" />
     </form>
-    
-    <input type="button" id="addWord" onclick="window.location.href='wordAdd.html'" value="Kelime Ekle">
+
+    <input
+      type="button"
+      id="addWord"
+      onclick="window.location.href='wordAdd.html'"
+      value="Kelime Ekle"
+    />
 
     <h3>Çözümlediğiniz kelimeler üzerinden analiziniz:</h3>
     <div id="analysisReport">
-        <p>Toplam Kelime Sayısı: 0</p>
+      <p>Toplam Kelime Sayısı: 0</p>
     </div>
-    <input type="button" id="printAnalyzes" value="Çıktı Al" onclick="window.print()">
+    <input
+      type="button"
+      id="printAnalyzes"
+      value="Çıktı Al"
+      onclick="window.print()"
+    />
 
     <script src="script/userSettings.js"></script>
-</body>
+  </body>
 </html>

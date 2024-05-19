@@ -83,38 +83,52 @@ app.post("/answer", async (req, res) => {
         return;
       }
 
+      if (results.length === 0) {
+        res.status(404).json({ message: "Word not found" });
+        return;
+      }
+
       const correctAnswer = results[0].word_meaning;
 
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      let updateQuery;
       // Kullanıcının cevabı ile doğru cevabı karşılaştır
       if (answer === correctAnswer) {
-        // Doğru cevaplanmış ise word_counter değerini arttır
-        db.query(
-          "UPDATE worddetails SET word_counter = word_counter + 1 WHERE user_id = ? AND word_id = ?",
-          [userId, wordId],
-          (error, updateResult) => {
-            if (error) {
-              console.error("Error updating word_counter:", error);
-              res.status(500).json({ message: "Internal Server Error" });
-              return;
-            }
-            console.log("Correct answer!");
-            res.json({ message: "Correct answer!" });
+        // Doğru cevaplanmış ise word_counter ve how_many_times_asked değerlerini arttır ve last_asked_date güncelle
+        updateQuery = `
+          UPDATE wordDetails 
+          SET 
+            word_counter = word_counter + 1, 
+            how_many_times_asked = how_many_times_asked + 1, 
+            last_asked_date = ?
+          WHERE user_id = ? AND word_id = ?
+        `;
+        db.query(updateQuery, [today, userId, wordId], (error, updateResult) => {
+          if (error) {
+            console.error("Error updating word details:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+            return;
           }
-        );
+          console.log("Correct answer!");
+          res.json({ message: "Correct answer!" });
+        });
       } else {
-        // Yanlış cevaplanmış ise word_counter değerini sıfırla
-        db.query(
-          "UPDATE worddetails SET word_counter = 0 WHERE user_id = ? AND word_id = ?",
-          [userId, wordId],
-          (error, updateResult) => {
-            if (error) {
-              console.error("Error updating word_counter:", error);
-              res.status(500).json({ message: "Internal Server Error" });
-              return;
-            }
-            res.json({ message: "Incorrect answer." });
+        // Yanlış cevaplanmış ise word_counter değerini sıfırla ve how_many_wrong_answers değerini arttır
+        updateQuery = `
+          UPDATE wordDetails 
+          SET 
+            word_counter = 0, 
+            how_many_wrong_answers = how_many_wrong_answers + 1
+          WHERE user_id = ? AND word_id = ?
+        `;
+        db.query(updateQuery, [userId, wordId], (error, updateResult) => {
+          if (error) {
+            console.error("Error updating word details:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+            return;
           }
-        );
+          res.json({ message: "Incorrect answer." });
+        });
       }
     });
   } catch (error) {
@@ -173,7 +187,6 @@ function addDefaultSettings(userId) {
     }
   );
 }
-
 
 // Kullanıcının ayarlarını almak için endpoint
 app.get("/settings/:userId", (req, res) => {

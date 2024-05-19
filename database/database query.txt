@@ -1,46 +1,48 @@
 CREATE DATABASE 6kelimetekrar;
 
 CREATE TABLE users (
-  user_id INT AUTO_INCREMENT PRIMARY KEY,
-  user_password VARCHAR(255),
-  user_email_address VARCHAR(45) UNIQUE,
-  user_fullname VARCHAR(255)
-);
-
-CREATE TABLE words (
-  word_id INT AUTO_INCREMENT PRIMARY KEY,
-  word_meaning VARCHAR(45),
-  word VARCHAR(45),
-  word_image VARCHAR(45),
-  word_in_sentence VARCHAR(255),
-  word_voice VARCHAR(255)
-);
-
-CREATE TABLE wordDetails (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  word_counter INT,
-  word_id INT,
-  user_id INT,
-  FOREIGN KEY (word_id) REFERENCES words(word_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_password VARCHAR(255) NOT NULL,
+    user_email_address VARCHAR(45) NOT NULL UNIQUE,
+    user_fullname VARCHAR(255) NOT NULL,
+    verification_code VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE settings (
-  setting_id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT UNIQUE,
-  word_limit INT DEFAULT 10,
-  next_ask_date DATE,
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+    setting_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    word_limit INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE knownWords (
-  known_id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
-  word_id INT,
-  last_asked_date DATE,
-  next_ask_date DATE,
-  FOREIGN KEY (user_id) REFERENCES users(user_id),
-  FOREIGN KEY (word_id) REFERENCES words(word_id)
+    known_word_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    word_id INT,
+    last_asked_date DATE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (word_id) REFERENCES words(word_id)
+);
+
+CREATE TABLE wordDetails (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    word_counter INT,
+    word_id INT,
+    user_id INT,
+    last_asked_date DATE,
+    how_many_times_asked INT,
+    how_many_wrong_answers INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (word_id) REFERENCES words(word_id)
+);
+
+CREATE TABLE words (
+    word_id INT AUTO_INCREMENT PRIMARY KEY,
+    word VARCHAR(45) NOT NULL,
+    word_meaning VARCHAR(45) NOT NULL,
+    word_in_sentence VARCHAR(255),
+    word_image VARCHAR(45),
+    word_voice VARCHAR(255)
 );
 
 INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_image, word_voice) VALUES ('stop', 'durmak', 'I had to stop abruptly at the intersection when the traffic light turned red', '"gorsel1.jpg"', '"ses1.mp3"');

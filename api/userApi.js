@@ -39,7 +39,6 @@ db.connect((err) => {
   console.log("MySQL veritabanına başarıyla bağlanıldı");
 });
 
-
 // Kayıt olma (register) endpoint'i
 app.post("/register", async (req, res) => {
   try {
@@ -181,7 +180,7 @@ app.post("/sendEmail", async (req, res) => {
                 if (err) {
                   console.error(
                     "Doğrulama kodu oluşturulurken bir hata oluştu:" +
-                    err.message
+                      err.message
                   );
                   res.status(500).json({
                     message: "Doğrulama kodu oluşturulurken bir hata oluştu.",

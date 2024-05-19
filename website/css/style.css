@@ -3,214 +3,214 @@
 @import url("https://fonts.googleapis.com/css?family=Quicksand");
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    height: 100vh;
-    width: 100vw;
-    background-image: linear-gradient(43deg,
-            #4158d0 0%,
-            #c850c0 46%,
-            #ffcc70 100%);
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .wrapper {
-    width: 80vw;
-    height: 80vh;
-    margin: auto;
-    background: transparent;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    -webkit-border-radius: 10;
-    -moz-border-radius: 10;
-    -ms-border-radius: 10;
-    -o-border-radius: 10;
+  width: 80vw;
+  height: 80vh;
+  margin: auto;
+  background: transparent;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  -ms-border-radius: 10;
+  -o-border-radius: 10;
 }
 
 h1 {
-    font-family: "Fredoka One", cursive;
-    font-size: 45px;
-    font-weight: 600;
-    color: #fff;
-    text-align: center;
-    padding-bottom: 20px;
-
+  font-family: "Fredoka One", cursive;
+  font-size: 45px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 20px;
 }
 
 #form {
-    padding-top: 35px;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-
+  padding-top: 35px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .form-group {
-    padding-bottom: 20px;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  padding-bottom: 20px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .form-group label {
-    font-family: "Poppins", sans-serif;
-    font-size: 20px;
-    color: #fff;
-    font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 500;
 }
 
 .form-group input {
-    width: 80%;
-    height: 100%;
-    border: none;
-    outline: none;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 40px;
-    -webkit-border-radius: 40px;
-    -moz-border-radius: 40px;
-    -ms-border-radius: 40px;
-    -o-border-radius: 40px;
-    font-size: 16px;
-    padding: 10px 45px 10px 20px;
+  width: 80%;
+  height: 100%;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
+  font-size: 16px;
+  padding: 10px 45px 10px 20px;
 }
 
 .form-group i {
-    position: absolute;
-    right: 70px;
-    top: 50%;
-    transform: translateY(-20%);
-    font-size: 20px;
-    -webkit-transform: translateY(-20%);
-    -moz-transform: translateY(-20%);
-    -ms-transform: translateY(-20%);
-    -o-transform: translateY(-20%);
-    color: #000;
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-20%);
+  font-size: 20px;
+  -webkit-transform: translateY(-20%);
+  -moz-transform: translateY(-20%);
+  -ms-transform: translateY(-20%);
+  -o-transform: translateY(-20%);
+  color: #000;
 }
 
 .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 0 50px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 0 50px;
 }
 
 .remember-forgot a {
-    font-size: 16px;
-    color: #fff;
-    text-decoration: none;
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
 }
 
 .remember-forgot a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 #form button {
-    width: 50%;
-    height: 45px;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    -webkit-border-radius: 40px;
-    -moz-border-radius: 40px;
-    -ms-border-radius: 40px;
-    -o-border-radius: 40px;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 50%;
+  height: 45px;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 #form button:hover {
-    animation: a 0.5s 1 linear;
+  animation: a 0.5s 1 linear;
 }
 
 #form .register-link {
-    padding-top: 20px;
-    font-family: "Poppins", sans-serif;
-    font-size: 16px;
-    color: #fff;
+  padding-top: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: #fff;
 }
 
 #form .register-link p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 #form .register-link p a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 @keyframes a {
-    0% {
-        transform: scale(0.8, 1.2);
-        -webkit-transform: scale(0.8, 1.2);
-        -moz-transform: scale(0.8, 1.2);
-        -ms-transform: scale(0.8, 1.2);
-        -o-transform: scale(0.8, 1.2);
-    }
+  0% {
+    transform: scale(0.8, 1.2);
+    -webkit-transform: scale(0.8, 1.2);
+    -moz-transform: scale(0.8, 1.2);
+    -ms-transform: scale(0.8, 1.2);
+    -o-transform: scale(0.8, 1.2);
+  }
 
-    25% {
-        transform: scale(1.2, 0.8);
-        -webkit-transform: scale(1.2, 0.8);
-        -moz-transform: scale(1.2, 0.8);
-        -ms-transform: scale(1.2, 0.8);
-        -o-transform: scale(1.2, 0.8);
-    }
+  25% {
+    transform: scale(1.2, 0.8);
+    -webkit-transform: scale(1.2, 0.8);
+    -moz-transform: scale(1.2, 0.8);
+    -ms-transform: scale(1.2, 0.8);
+    -o-transform: scale(1.2, 0.8);
+  }
 
-    50% {
-        transform: scale(0.8, 1.2);
-        -webkit-transform: scale(0.8, 1.2);
-        -moz-transform: scale(0.8, 1.2);
-        -ms-transform: scale(0.8, 1.2);
-        -o-transform: scale(0.8, 1.2);
-    }
+  50% {
+    transform: scale(0.8, 1.2);
+    -webkit-transform: scale(0.8, 1.2);
+    -moz-transform: scale(0.8, 1.2);
+    -ms-transform: scale(0.8, 1.2);
+    -o-transform: scale(0.8, 1.2);
+  }
 
-    75% {
-        transform: scale(1.2, 0.8);
-        -webkit-transform: scale(1.2, 0.8);
-        -moz-transform: scale(1.2, 0.8);
-        -ms-transform: scale(1.2, 0.8);
-        -o-transform: scale(1.2, 0.8);
-    }
+  75% {
+    transform: scale(1.2, 0.8);
+    -webkit-transform: scale(1.2, 0.8);
+    -moz-transform: scale(1.2, 0.8);
+    -ms-transform: scale(1.2, 0.8);
+    -o-transform: scale(1.2, 0.8);
+  }
 
-    100% {
-        transform: scale(1, 1);
-        -webkit-transform: scale(1, 1);
-        -moz-transform: scale(1, 1);
-        -ms-transform: scale(1, 1);
-        -o-transform: scale(1, 1);
-    }
+  100% {
+    transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    -moz-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+  }
 }
 
 @media (max-width: 768px) {
-    .container {
-        height: 100vh;
-        overflow: hidden;
-    }
+  .container {
+    height: 100vh;
+    overflow: hidden;
+  }
 
-    .form-group {
-        width: 100%;
-    }
+  .form-group {
+    width: 100%;
+  }
 
-    img,
-    .form-group i {
-        display: none;
-    }
+  img,
+  .form-group i {
+    display: none;
+  }
 
-    .form-group input {
-        padding: 10px 10px;
-        font-size: 14px;
-    }
+  .form-group input {
+    padding: 10px 10px;
+    font-size: 14px;
+  }
 }

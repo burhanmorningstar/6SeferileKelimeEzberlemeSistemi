@@ -1,7 +1,6 @@
 const wordApiUrl = "http://localhost:3001";
 const userApiUrl = "http://localhost:3000";
 
-
 let correctAnswers = [];
 let userAnswers = [];
 let questions = [];
@@ -110,7 +109,6 @@ const updateHtml = (question) => {
 
     const audioElement = document.getElementById("wordAudio");
     audioElement.src = question.word_voice;
-
   } else {
     showResults();
   }
