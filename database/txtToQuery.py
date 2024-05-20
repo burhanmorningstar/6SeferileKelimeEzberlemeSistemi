@@ -9,14 +9,14 @@ def save_sql_query_to_txt(sql_query, file_path):
         print("Dosya yazma hatası:", e)
 
 def main():
-    input_file_path = "input.txt"
-    output_file_path = "output.txt"
+    input_file_path = "C:\\Users\\geire\\OneDrive\\Belgeler\\GitHub\\6SeferileKelimeEzberlemeSistemi\\database\\input.txt"
+    output_file_path = "C:\\Users\\geire\\OneDrive\\Belgeler\\GitHub\\6SeferileKelimeEzberlemeSistemi\\database\\output.txt"
 
-    with open(input_file_path, 'w+', encoding='utf-8') as file:
+    with open(input_file_path, 'r', encoding='utf-8') as file:
         for line in file:
             kelime, anlami, cumleicinde, gorsel, ses = line.strip().split('-')
-            gorsel = "\"" + gorsel + "\"" 
-            ses = "\"" + ses + "\"" 
+            gorsel = "\"" + "\\api\\gorseller\\" +gorsel + "\"" 
+            ses = "\"" + "\\api\\sesler\\" + ses + "\"" 
             sql_query = generate_sql_query(kelime, anlami, cumleicinde,gorsel,ses)
             save_sql_query_to_txt(sql_query, output_file_path)
 

@@ -5,7 +5,7 @@ CREATE TABLE users (
     user_password VARCHAR(255) NOT NULL,
     user_email_address VARCHAR(45) NOT NULL UNIQUE,
     user_fullname VARCHAR(255) NOT NULL,
-    verification_code VARCHAR(255) NOT NULL
+    verification_code VARCHAR(255)
 );
 
 CREATE TABLE settings (
@@ -33,6 +33,7 @@ CREATE TABLE wordDetails (
     next_quiz_date DATE,
     how_many_times_asked INT,
     how_many_wrong_answers INT,
+    how_many_correct_answers INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (word_id) REFERENCES words(word_id)
 );
