@@ -39,6 +39,32 @@ db.connect((err) => {
   console.log("MySQL veritabanına başarıyla bağlanıldı");
 });
 
+// /getUserName endpoint'i
+app.get("/getUserName/:user_id", (req, res) => {
+  const user_id = req.params.user_id;
+
+  // Kullanıcının adını veritabanından alalım
+  db.query(
+    "SELECT user_fullname FROM users WHERE user_id = ?",
+    [user_id],
+    (err, result) => {
+      if (err) {
+        console.error(
+          "Kullanıcı adı alınırken bir hata oluştu: " + err.message
+        );
+        res.status(500).send("Kullanıcı adı alınırken bir hata oluştu.");
+      } else {
+        if (result.length > 0) {
+          const user_name = result[0].user_fullname;
+          res.status(200).json({ user_name: user_name });
+        } else {
+          res.status(404).send("Kullanıcı bulunamadı.");
+        }
+      }
+    }
+  );
+});
+
 // Kayıt olma (register) endpoint'i
 app.post("/register", async (req, res) => {
   try {
