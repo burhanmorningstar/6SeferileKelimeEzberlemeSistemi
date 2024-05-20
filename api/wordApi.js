@@ -257,10 +257,10 @@ function addDefaultSettings(userId) {
             word_counter: 0,
             user_id: userId,
             word_id: i,
-            next_quiz_date : today,
+            next_quiz_date: today,
             how_many_times_asked: 0,
             how_many_wrong_answers: 0,
-            how_many_correct_answers: 0
+            how_many_correct_answers: 0,
           };
           db.query(
             "INSERT INTO worddetails SET ?",
@@ -294,7 +294,9 @@ app.get("/settings/:userId", (req, res) => {
           // Eğer kullanıcıya ait ayarlar bulunamazsa varsayılan ayarları ekleyin
           addDefaultSettings(userId);
           // Varsayılan ayarları gönderin
-          res.status(200).json({ message : "Varsayılan ayarlar başarıyla eklendi."});
+          res
+            .status(200)
+            .json({ message: "Varsayılan ayarlar başarıyla eklendi." });
         } else {
           // Kullanıcının ayarlarını gönderin
           res.status(200).json(result[0]);

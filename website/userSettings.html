@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ayarlar</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/userSettings.css" />
   </head>
   <body>
     <form id="settingsForm">
@@ -36,10 +38,8 @@
       onclick="window.location.href='wordAdd.html'"
       value="Kelime Ekle"
     />
-
-    <h3>Çözümlediğiniz kelimeler üzerinden analiziniz:</h3>
-    <div id="analysisReport">
-      <p>Toplam Kelime Sayısı: 0</p>
+    <div style="width: 400px; height: 400px" id="analysisChartDiv">
+      <canvas id="analysisChart"></canvas>
     </div>
     <input
       type="button"
@@ -47,6 +47,11 @@
       value="Çıktı Al"
       onclick="window.print()"
     />
+
+    <div id="analysisReport">
+      <h3>Çözümlediğiniz kelimeler üzerinden analiziniz:</h3>
+      <p>Toplam Kelime Sayısı: 0</p>
+    </div>
 
     <script src="script/userSettings.js"></script>
   </body>

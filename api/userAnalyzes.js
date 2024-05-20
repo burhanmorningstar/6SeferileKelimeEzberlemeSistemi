@@ -61,7 +61,7 @@ app.post("/save-settings", (req, res) => {
   });
 });
 
-app.get('/get-analysis', (req, res) => {
+app.get("/get-analysis", (req, res) => {
   const userId = req.query.user_id;
 
   if (!userId) {
@@ -82,23 +82,33 @@ app.get('/get-analysis', (req, res) => {
       console.error("Error fetching analysis:", error);
       return res.status(500).json({ message: "Internal Server Error" });
     }
-    const totalAsked = results.reduce((acc, word) => acc + word.how_many_times_asked, 0);
+    const totalAsked = results.reduce(
+      (acc, word) => acc + word.how_many_times_asked,
+      0
+    );
     const totalWords = results.length;
-    const wrongAnswers = results.reduce((acc, word) => acc + word.how_many_wrong_answers, 0);
-    const correctAnswers = results.reduce((acc, word) => acc + word.how_many_correct_answers, 0);
-    const successPercentage = totalAsked ? ((correctAnswers / (correctAnswers + wrongAnswers)) * 100).toFixed(2) : 0;
+    const wrongAnswers = results.reduce(
+      (acc, word) => acc + word.how_many_wrong_answers,
+      0
+    );
+    const correctAnswers = results.reduce(
+      (acc, word) => acc + word.how_many_correct_answers,
+      0
+    );
+    const successPercentage = totalAsked
+      ? ((correctAnswers / (correctAnswers + wrongAnswers)) * 100).toFixed(2)
+      : 0;
 
     res.json({
-      totalWords,
-      successPercentage,
+      wordsLength: totalWords,
+      percentage: successPercentage,
       words: results,
-      totalWrong : wrongAnswers,
-      totalCorrect : correctAnswers,
-      totalAsked : totalAsked,
+      totalWrong: wrongAnswers,
+      totalCorrect: correctAnswers,
+      totalAsked: totalAsked,
     });
   });
 });
-
 
 app.listen(port, () => {
   console.log(`Sunucu ${port} portunda çalışıyor...`);

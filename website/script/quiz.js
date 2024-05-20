@@ -35,6 +35,10 @@ function fetchQuestions(userId) {
 
 function submitAnswer(wordId, userId) {
   const answer = answerInput.value.trim();
+  if (answer.length === 0) {
+    alert("Lütfen bir cevap giriniz.");
+    return;
+  }
   submitAnswerToApi(userId, wordId, answer);
   answerInput.value = "";
 }

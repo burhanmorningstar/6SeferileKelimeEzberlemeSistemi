@@ -99,7 +99,11 @@ app.post(
           }
 
           // Relative dosya yollarını belirleyelim
-          const relativeImagePath = path.join("/api","gorseller",gorselDosyaAdi);
+          const relativeImagePath = path.join(
+            "/api",
+            "gorseller",
+            gorselDosyaAdi
+          );
           const relativeAudioPath = path.join("/api", "sesler", sesDosyaAdi);
 
           // Dosya adlarını güncellemek için veritabanı sorgusu
