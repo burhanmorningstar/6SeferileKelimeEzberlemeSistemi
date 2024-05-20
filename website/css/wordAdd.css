@@ -11,12 +11,10 @@
 body {
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
+  background-image: linear-gradient(43deg,
+      #4158d0 0%,
+      #c850c0 46%,
+      #ffcc70 100%);
   line-height: 1.6;
   display: flex;
   justify-content: center;
@@ -34,4 +32,49 @@ body {
   -moz-border-radius: 10;
   -ms-border-radius: 10;
   -o-border-radius: 10;
+}
+
+h1 {
+  font-family: "Fredoka One", cursive;
+  font-size: 45px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #000;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+}
+
+#wordSentence {
+  width: 90%;
+
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  img,
+  .form-group i {
+    display: none;
+  }
+
+  .form-group input {
+    padding: 10px 10px;
+    font-size: 14px;
+  }
 }
