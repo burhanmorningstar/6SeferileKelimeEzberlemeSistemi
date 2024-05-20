@@ -1,4 +1,4 @@
-def generate_sql_query(kelime, anlami, cumleicinde,gorsel,ses):
+def generate_sql_query(kelime, anlami, cumleicinde, gorsel, ses):
     return f"INSERT INTO 6kelimetekrar.words (word, word_meaning, word_in_sentence, word_image, word_voice) VALUES ('{kelime}', '{anlami}', '{cumleicinde}', '{gorsel}', '{ses}');"
 
 def save_sql_query_to_txt(sql_query, file_path):
@@ -14,10 +14,11 @@ def main():
 
     with open(input_file_path, 'r', encoding='utf-8') as file:
         for line in file:
+            print("Line:", line.strip())  # Add this line for debugging
             kelime, anlami, cumleicinde, gorsel, ses = line.strip().split('-')
-            gorsel = "\"" + "\\api\\gorseller\\" +gorsel + "\"" 
-            ses = "\"" + "\\api\\sesler\\" + ses + "\"" 
-            sql_query = generate_sql_query(kelime, anlami, cumleicinde,gorsel,ses)
+            gorsel = "\\api\\gorseller\\" + gorsel
+            ses = "\\api\\sesler\\" + ses
+            sql_query = generate_sql_query(kelime, anlami, cumleicinde, gorsel, ses)
             save_sql_query_to_txt(sql_query, output_file_path)
 
     print("Tüm satırlar işlendi ve SQL sorguları dosyaya kaydedildi.")
