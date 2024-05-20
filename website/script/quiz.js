@@ -102,7 +102,8 @@ const updateHtml = (question) => {
   if (question) {
     const questionSentenceElement = document.getElementById("questionSentence");
     questionSentenceElement.innerHTML = "";
-    question.word_in_sentence.forEach(sentence => {
+    const sentence = question.word_in_sentence.split(".")
+    sentence.forEach(sentence => {
       const pElement = document.createElement("p");
       pElement.textContent = sentence;
       questionSentenceElement.appendChild(pElement);
