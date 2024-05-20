@@ -100,13 +100,18 @@ answerInput.addEventListener("keydown", (event) => {
 
 const updateHtml = (question) => {
   if (question) {
+    const sentences = question.word_in_sentence.split(".");
+    sentences.forEach((sentence) => {
+      const sentenceElement = document.createElement("p");
+      sentenceElement.textContent = sentence.trim();
+    });
     const englishParagraph = document.getElementById("questionWord");
     englishParagraph.textContent = `${question.word}`;
     resultQuestions.push(question.word);
     correctAnswers.push(question.word_meaning);
 
     const usageParagraph = document.getElementById("questionSentence");
-    usageParagraph.textContent = `${question.word_in_sentence}`;
+    usageParagraph.textContent = `${sentences}`;
 
     const imageElement = document.getElementById("wordImg");
     imageElement.src = question.word_image;
