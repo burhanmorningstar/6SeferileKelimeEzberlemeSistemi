@@ -30,6 +30,7 @@ CREATE TABLE wordDetails (
     word_id INT,
     user_id INT,
     last_asked_date DATE,
+    next_quiz_date DATE,
     how_many_times_asked INT,
     how_many_wrong_answers INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),

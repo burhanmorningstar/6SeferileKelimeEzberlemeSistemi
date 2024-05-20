@@ -8,34 +8,9 @@ document
     event.preventDefault();
 
     const wordLimitSetting = document.getElementById("wordLimitSetting").value;
-    const wordDateSetting = document.getElementById("wordDateSetting").value;
-
-    const today = new Date();
-    let targetDate;
-    switch (wordDateSetting) {
-      case "1day":
-        targetDate = new Date(today.setDate(today.getDate() + 1));
-        break;
-      case "7days":
-        targetDate = new Date(today.setDate(today.getDate() + 7));
-        break;
-      case "1month":
-        targetDate = new Date(today.setMonth(today.getMonth() + 1));
-        break;
-      case "3months":
-        targetDate = new Date(today.setMonth(today.getMonth() + 3));
-        break;
-      case "6months":
-        targetDate = new Date(today.setMonth(today.getMonth() + 6));
-        break;
-      case "1year":
-        targetDate = new Date(today.setFullYear(today.getFullYear() + 1));
-        break;
-    }
 
     const settingsData = {
       wordLimit: wordLimitSetting,
-      wordDate: targetDate.toISOString().split("T")[0],
       userId: userId,
     };
 
@@ -59,21 +34,34 @@ document
     }
   });
 
-// Analiz raporu oluşturma işlevi
-async function fetchAnalysisReport() {
-  try {
-    const response = await fetch(apiUrl + "/get-analysis");
-    const data = await response.json();
-
-    const analysisReportDiv = document.getElementById("analysisReport");
-    analysisReportDiv.innerHTML = `
-            <p>Toplam Kelime Sayısı: ${data.totalWords}</p>
-            <p>Başarı Yüzdesi: ${data.successPercentage}%</p>
-        `;
-  } catch (error) {
-    console.error("Analiz raporu alınırken bir hata oluştu:", error);
+  async function fetchAnalysisReport() {
+    try {
+      const response = await fetch(apiUrl + "/get-analysis?user_id=" + userId);
+      const data = await response.json();
+  
+      const analysisReportDiv = document.getElementById("analysisReport");
+      analysisReportDiv.innerHTML = `
+        <p>Toplam Kelime Sayısı: ${data.totalWords}</p>
+        <p>Başarı Yüzdesi: ${data.successPercentage}%</p>
+        <p>Yanlış Sayısı: ${data.totalWrong}</p>
+        <p>Doğru Sayısı: ${data.totalCorrect}</p>
+        <p>Toplam Sayı: ${data.totalAsked}</p>
+        <h3>Detaylı Rapor:</h3>
+        <ul>
+          ${data.words.map(word => `
+            <li>
+              <strong>Kelime:</strong> ${word.word} <br>
+              <strong>Seviye:</strong> ${word.word_counter}<br>
+              <strong>Doğru Sayısı:</strong> ${word.how_many_correct_answers}<br>
+              <strong>Yanlış Sayısı:</strong> ${word.how_many_wrong_answers}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    } catch (error) {
+      console.error("Analiz raporu alınırken bir hata oluştu:", error);
+    }
   }
-}
-
+  
 // Sayfa yüklendiğinde analiz raporunu al
 window.onload = fetchAnalysisReport;

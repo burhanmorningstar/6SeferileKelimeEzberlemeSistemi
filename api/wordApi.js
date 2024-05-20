@@ -43,15 +43,15 @@ app.get("/questions/:userId", async (req, res) => {
         const wordLimit =
           settingsResult.length > 0 ? settingsResult[0].word_limit : 10;
 
-        // Rastgele bir kelime seç
+        // Kullanıcının tekrarlanması gereken kelimelerini getir
         const query = `
-        SELECT w.*, wd.word_counter, wd.user_id
-        FROM words AS w
-        INNER JOIN worddetails AS wd ON w.word_id = wd.word_id
-        WHERE wd.user_id = ? AND wd.word_counter < 6
-        ORDER BY RAND()
-        LIMIT ?;
-      `;
+          SELECT w.*, wd.word_counter, wd.user_id, wd.next_quiz_date
+          FROM words AS w
+          INNER JOIN wordDetails AS wd ON w.word_id = wd.word_id
+          WHERE wd.user_id = ? AND wd.word_counter < 6 AND wd.next_quiz_date <= CURDATE()
+          ORDER BY RAND()
+          LIMIT ?;
+        `;
         db.query(query, [userId, wordLimit], (error, results) => {
           if (error) {
             console.error("Error fetching questions:", error);
@@ -90,35 +90,122 @@ app.post("/answer", async (req, res) => {
 
       const correctAnswer = results[0].word_meaning;
 
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-      let updateQuery;
       // Kullanıcının cevabı ile doğru cevabı karşılaştır
       if (answer === correctAnswer) {
-        // Doğru cevaplanmış ise word_counter ve how_many_times_asked değerlerini arttır ve last_asked_date güncelle
-        updateQuery = `
+        // Doğru cevaplanmış ise word_counter, how_many_times_asked değerlerini arttır ve last_asked_date güncelle
+        const today = new Date();
+
+        let nextQuizDate;
+        const getNextQuizDate = (level) => {
+          switch (level) {
+            case 0:
+              return new Date(today.setDate(today.getDate() + 1));
+            case 1:
+              return new Date(today.setDate(today.getDate() + 7));
+            case 2:
+              return new Date(today.setMonth(today.getMonth() + 1));
+            case 3:
+              return new Date(today.setMonth(today.getMonth() + 3));
+            case 4:
+              return new Date(today.setMonth(today.getMonth() + 6));
+            case 5:
+              return new Date(today.setFullYear(today.getFullYear() + 1));
+            default:
+              return today;
+          }
+        };
+
+        const updateQuery = `
           UPDATE wordDetails 
           SET 
             word_counter = word_counter + 1, 
-            how_many_times_asked = how_many_times_asked + 1, 
-            last_asked_date = ?
+            how_many_times_asked = how_many_times_asked + 1,
+            how_many_correct_answers = how_many_correct_answers + 1, 
+            last_asked_date = ?,
+            next_quiz_date = ?
           WHERE user_id = ? AND word_id = ?
         `;
-        db.query(updateQuery, [today, userId, wordId], (error, updateResult) => {
-          if (error) {
-            console.error("Error updating word details:", error);
-            res.status(500).json({ message: "Internal Server Error" });
-            return;
+
+        db.query(
+          `SELECT word_counter FROM wordDetails WHERE user_id = ? AND word_id = ?`,
+          [userId, wordId],
+          (err, result) => {
+            if (err) {
+              console.error("Error fetching word counter:", err);
+              res.status(500).json({ message: "Internal Server Error" });
+              return;
+            }
+
+            const currentLevel = result[0].word_counter;
+            nextQuizDate = getNextQuizDate(currentLevel);
+
+            db.query(
+              updateQuery,
+              [
+                today.toISOString().split("T")[0],
+                nextQuizDate.toISOString().split("T")[0],
+                userId,
+                wordId,
+              ],
+              (error, updateResult) => {
+                if (error) {
+                  console.error("Error updating word details:", error);
+                  res.status(500).json({ message: "Internal Server Error" });
+                  return;
+                }
+                console.log("Correct answer!");
+                res.json({ message: "Correct answer!" });
+              }
+            );
+            // MySQL sorgusu: word_counter kontrolü
+            db.query(
+              `SELECT word_counter FROM wordDetails WHERE user_id = ? AND word_id = ?`,
+              [userId, wordId],
+              (err, result) => {
+                if (err) {
+                  console.error("Error fetching word counter:", err);
+                  res.status(500).json({ message: "Internal Server Error" });
+                  return;
+                }
+
+                const wordCounter = result[0].word_counter;
+
+                if (wordCounter > 6) {
+                  // word_counter > 6 ise kelimeyi knownwords tablosuna ekle
+                  const insertQuery = `
+            INSERT INTO knownwords (user_id, word_id, last_asked_date)
+            VALUES (?, ?, ?)
+          `;
+                  db.query(
+                    insertQuery,
+                    [userId, wordId, new Date().toISOString().split("T")[0]],
+                    (error, insertResult) => {
+                      if (error) {
+                        console.error(
+                          "Error inserting word into knownwords:",
+                          error
+                        );
+                        res
+                          .status(500)
+                          .json({ message: "Internal Server Error" });
+                        return;
+                      }
+                      console.log("Word added to knownwords table");
+                    }
+                  );
+                }
+              }
+            );
           }
-          console.log("Correct answer!");
-          res.json({ message: "Correct answer!" });
-        });
+        );
       } else {
         // Yanlış cevaplanmış ise word_counter değerini sıfırla ve how_many_wrong_answers değerini arttır
-        updateQuery = `
+        const updateQuery = `
           UPDATE wordDetails 
           SET 
             word_counter = 0, 
-            how_many_wrong_answers = how_many_wrong_answers + 1
+            how_many_wrong_answers = how_many_wrong_answers + 1,
+            how_many_times_asked = how_many_times_asked + 1
           WHERE user_id = ? AND word_id = ?
         `;
         db.query(updateQuery, [userId, wordId], (error, updateResult) => {
@@ -155,12 +242,12 @@ function addDefaultSettings(userId) {
         );
         return;
       }
-
       db.query("SELECT COUNT(*) AS total FROM words", (err, result) => {
         if (err) {
           console.error("Kelime sayısı alınırken bir hata oluştu:", err);
           return;
         }
+        const today = new Date().toISOString().split("T")[0];
 
         const totalWords = result[0].total;
 
@@ -170,6 +257,10 @@ function addDefaultSettings(userId) {
             word_counter: 0,
             user_id: userId,
             word_id: i,
+            next_quiz_date : today,
+            how_many_times_asked: 0,
+            how_many_wrong_answers: 0,
+            how_many_correct_answers: 0
           };
           db.query(
             "INSERT INTO worddetails SET ?",
@@ -203,11 +294,7 @@ app.get("/settings/:userId", (req, res) => {
           // Eğer kullanıcıya ait ayarlar bulunamazsa varsayılan ayarları ekleyin
           addDefaultSettings(userId);
           // Varsayılan ayarları gönderin
-          res.status(200).json({
-            word_counter: 0,
-            word_limit: 10,
-            next_ask_date: "2024-05-01", // next_ask_date değeri 1 Mayıs 2024 olarak ayarlandı
-          });
+          res.status(200).json({ message : "Varsayılan ayarlar başarıyla eklendi."});
         } else {
           // Kullanıcının ayarlarını gönderin
           res.status(200).json(result[0]);
