@@ -76,8 +76,12 @@ resetForm.addEventListener("submit", async (e) => {
         user_password: confirmPassword,
       }),
     });
-
     const data2 = await response2.json();
+    console.log(data2);
+    if(data2.message === "Şifre başarıyla sıfırlandı.") {
+      messageDiv.style.display = "block";
+      messageDiv.innerHTML = '<p>Şifre Başarıyla Sıfırlandı! <a href="login.html">Giriş Ekranına Dön</a></p>';
+    }
   } catch (error) {
     console.error("Şifre sıfırlama işlemi sırasında bir hata oluştu:", error);
   }

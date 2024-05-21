@@ -69,7 +69,7 @@ body {
   text-align: center;
 }
 
-span {
+#questionWord,#questionSentence {
   font-size: 35px;
   font-weight: 300;
   color: #fff;
@@ -87,7 +87,7 @@ span {
 
 #footer audio,
 input,
-button {
+#submitBtn {
   border: none;
   outline: none;
   color: #000;
@@ -113,7 +113,7 @@ input {
   margin: 10px;
 }
 
-button {
+#submitBtn {
   width: 20%;
   background: #fff;
   border-radius: 10px;
@@ -203,4 +203,8 @@ button {
   50% {
     transform: translate(10px, 0);
   }
+}
+
+#message{
+  display: none;
 }

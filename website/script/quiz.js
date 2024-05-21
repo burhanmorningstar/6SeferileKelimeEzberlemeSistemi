@@ -128,11 +128,16 @@ const updateHtml = (question) => {
     const audioElement = document.getElementById("wordAudio");
     audioElement.src = question.word_voice;
   } else {
+    const answerInput = document.getElementById("answer");
+    answerInput.disabled = true;
     showResults();
   }
 };
 const closeModalBtn = document.getElementById("closeModalBtn");
-closeModalBtn.addEventListener("click", closeModal);
+closeModalBtn.addEventListener("click", () => {
+  closeModal();
+  location.reload();
+});
 
 function closeModal() {
   const modal = document.getElementById("resultModal");
