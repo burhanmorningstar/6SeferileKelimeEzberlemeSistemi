@@ -41,7 +41,7 @@ loginSubmitBtn.addEventListener("click", async function (event) {
         console.error("Ayarlar alınırken bir hata oluştu:", error);
       }
       console.log("Giriş başarılı, user_id:", userId);
-      window.location.href = "index2.html?user_id=" + userId;
+      window.location.href = "index.html?user_id=" + userId;
     } else {
       // Giriş başarısız, hata mesajını göster
       console.error(data.message);
