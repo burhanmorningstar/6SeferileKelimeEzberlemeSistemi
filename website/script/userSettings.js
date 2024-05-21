@@ -1,6 +1,10 @@
 const urlParams = new URLSearchParams(window.location.search);
 let userId = urlParams.get("user_id");
 const apiUrl = "http://localhost:3003";
+const detailedAnalysis = document.getElementById("detailedAnalysis");
+const showModal = document.getElementById("showModal");
+
+showModal.addEventListener("click", () => showResults());
 
 document
   .getElementById("settingsForm")
@@ -52,8 +56,8 @@ async function fetchAnalysisReport() {
             label: "Cevaplar",
             data: [data.totalCorrect, data.totalWrong],
             backgroundColor: [
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(255, 99, 132, 0.2)",
+              "rgba(75, 192, 192, 0.7)",
+              "rgba(255, 99, 132, 0.7)",
             ],
             borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
             borderWidth: 1,
@@ -66,33 +70,45 @@ async function fetchAnalysisReport() {
       },
     });
 
-    // Detaylı raporu ekrana yazdır
-    analysisReportDiv.innerHTML += `
-            <p>Toplam Kelime Sayısı: ${data.totalAsked}</p>
-            <p>Başarı Yüzdesi: ${data.percentage}%</p>
-            <p>Yanlış Sayısı: ${data.totalWrong}</p>
-            <p>Doğru Sayısı: ${data.totalCorrect}</p>
-            <p>Toplam Sayı: ${data.totalAsked}</p>
-            <h3>Detaylı Rapor:</h3>
-            <ul>
-                ${data.words
-                  .map(
-                    (word) => `
-                    <li>
-                        <strong>Kelime:</strong> ${word.word} <br>
-                        <strong>Seviye:</strong> ${word.word_counter}<br>
-                        <strong>Doğru Sayısı:</strong> ${word.how_many_correct_answers}<br>
-                        <strong>Yanlış Sayısı:</strong> ${word.how_many_wrong_answers}
-                    </li>
-                `
-                  )
-                  .join("")}
-            </ul>
-        `;
+    analysisReportDiv.innerHTML += `<p>Toplam Kelime Sayısı: ${data.totalAsked}</p><p>Başarı Yüzdesi: ${data.percentage}%</p> <p>Yanlış Sayısı: ${data.totalWrong}</p> <p>Doğru Sayısı: ${data.totalCorrect}</p> <p>Toplam Sayı: ${data.totalAsked}</p>`;
+
+    // Veriyi global bir değişkene atayın ki showResults fonksiyonu bu veriyi kullanabilsin
+    window.analysisData = data;
   } catch (error) {
     console.error("Analiz raporu alınırken bir hata oluştu:", error);
   }
 }
+
+function showResults() {
+  const data = window.analysisData; // Veriyi global değişkenden alın
+  var tbody = document.getElementById("analysisTable");
+  tbody.innerHTML = "";
+  for (var i = 0; i < data.words.length; i++) {
+    var tr = document.createElement("tr");
+
+    var tdWord = document.createElement("td");
+    tdWord.textContent = data.words[i].word;
+    tr.appendChild(tdWord);
+
+    var tdLevel = document.createElement("td");
+    tdLevel.textContent = data.words[i].word_counter;
+    tr.appendChild(tdLevel);
+
+    var tdDogruCevap = document.createElement("td");
+    tdDogruCevap.textContent = data.words[i].how_many_correct_answers;
+    tr.appendChild(tdDogruCevap);
+
+    var tdYanlisCevap = document.createElement("td");
+    tdYanlisCevap.textContent = data.words[i].how_many_wrong_answers;
+    tr.appendChild(tdYanlisCevap);
+
+    tbody.appendChild(tr);
+  }
+  const modal = document.getElementById("modal");
+  modal.style.display = "block";
+  modal.classList.add("show");
+}
+
 if (userId) {
   analysisChartDiv.style.display = "block";
   analysisReport.style.display = "block";
@@ -101,3 +117,19 @@ if (userId) {
 
 // Sayfa yüklendiğinde analiz raporunu al
 window.onload = fetchAnalysisReport;
+
+$(document).on("click", ".print", function () {
+  const section = $("section");
+  const modalBody = $(".modal-body");
+  modalBody.detach();
+
+  const content = $(".content").detach();
+  section.append(modalBody);
+
+  modalBody[0].style.paddingTop = "3300px";
+  window.print();
+  section.empty();
+  section.append(content);
+  $(".modal-body-wrapper").append(modalBody);
+  modalBody[0].style.paddingTop = "0px";
+});

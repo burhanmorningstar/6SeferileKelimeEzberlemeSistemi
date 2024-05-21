@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label for="wordAudio">Kelimenin Sesli Okunuşu:</label>
-                        <input type="file" class="form-control-file" id="wordAudio" accept="audio/*">
+                        <input type="file" class="form-control-file" id="wordAudio" accept="audio/*" required>
                         <audio id="audioPreview" controls class="d-none">
                             <source id="audioSource" src="#" type="audio/mpeg">
                             Tarayıcınız ses öğesini desteklemiyor.
@@ -90,4 +90,5 @@
             reader.readAsDataURL(event.target.files[0]);
         });
     </script>
+    
 </body>

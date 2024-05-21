@@ -57,7 +57,7 @@ input[type="text"] {
   border: 1px solid #000;
   border-radius: 5px;
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Fredoka One", cursive;
 }
 
 #wordSentence {
@@ -76,6 +76,10 @@ button {
 
 button:hover {
   animation: a 0.5s 1 linear;
+}
+
+input[type="text"]:focus {
+  border: 2px solid #000;
 }
 
 @media (max-width: 768px) {
