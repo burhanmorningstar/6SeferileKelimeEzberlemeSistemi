@@ -2,6 +2,8 @@ const resetForm = document.getElementById("resetForm");
 const messageDiv = document.getElementById("message");
 const apiUrl = "http://localhost:3000";
 const sendEmailForm = document.getElementById("sendEmailForm");
+const wrongEmail = document.getElementById("wrongEmail");
+const wrongCode = document.getElementById("wrongCode");
 
 sendEmailForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -18,19 +20,16 @@ sendEmailForm.addEventListener("submit", async (e) => {
         user_email_address: email,
       }),
     });
-
+    if (response.status !== 200) {
+      openAlert(wrongEmail);
+      throw new Error("E-mail kayıtlı değil.");
+    }
     const data = await response.json();
-    messageDiv.textContent = data.message;
-    messageDiv.style.display = "block";
+    resetForm.style.display = "block";
   } catch (error) {
-    console.error("Şifre sıfırlama işlemi sırasında bir hata oluştu:", error);
-    messageDiv.textContent =
-      "Şifre sıfırlama işlemi sırasında bir hata oluştu.";
-    messageDiv.style.display = "block";
+    console.error("E-mail kayıtlı değil:", error);
   }
 });
-
-//asdasdad
 
 resetForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -59,6 +58,7 @@ resetForm.addEventListener("submit", async (e) => {
 
     const data1 = await response1.json();
     if (response1.status !== 200) {
+      openAlert(wrongCode);
       throw new Error("Doğrulama kodu yanlış.");
     }
 
@@ -74,12 +74,43 @@ resetForm.addEventListener("submit", async (e) => {
     });
 
     const data2 = await response2.json();
-    messageDiv.textContent = data2.message;
-    messageDiv.style.display = "block";
   } catch (error) {
     console.error("Şifre sıfırlama işlemi sırasında bir hata oluştu:", error);
-    messageDiv.textContent =
-      "Şifre sıfırlama işlemi sırasında bir hata oluştu: " + error.message;
-    messageDiv.style.display = "block";
   }
+});
+function closeAlert(element) {
+  setTimeout(function () {
+    element.style.display = "none";
+  }, 100);
+}
+
+function openAlert(element) {
+  element.style.display = "block";
+
+  if (document.documentElement.classList.contains("lt-ie9")) {
+    var speed = 300;
+    var times = 3;
+    var loop = setInterval(anim, speed);
+
+    function anim() {
+      times--;
+      if (times === 0) {
+        clearInterval(loop);
+      }
+
+      var alertBox = element;
+      alertBox.style.left = "450px";
+      setTimeout(function () {
+        alertBox.style.left = "440px";
+      }, speed);
+    }
+
+    anim();
+  }
+}
+
+document.querySelectorAll(".close-ot-alert").forEach(function (closeButton) {
+  closeButton.addEventListener("click", function () {
+    closeAlert(closeButton.parentElement);
+  });
 });

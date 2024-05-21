@@ -69,7 +69,7 @@ async function fetchAnalysisReport() {
     // Detaylı raporu ekrana yazdır
     analysisReportDiv.innerHTML += `
             <p>Toplam Kelime Sayısı: ${data.totalAsked}</p>
-            <p>Başarı Yüzdesi: ${data.successPercentage}%</p>
+            <p>Başarı Yüzdesi: ${data.percentage}%</p>
             <p>Yanlış Sayısı: ${data.totalWrong}</p>
             <p>Doğru Sayısı: ${data.totalCorrect}</p>
             <p>Toplam Sayı: ${data.totalAsked}</p>

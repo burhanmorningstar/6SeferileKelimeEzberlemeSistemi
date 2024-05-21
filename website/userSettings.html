@@ -1,58 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ayarlar</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="css/userSettings.css" />
-  </head>
-  <body>
-    <form id="settingsForm">
-      <label for="wordLimitSetting">Ekrana Kaç Kelime çıksın</label>
-      <select name="wordLimitSetting" id="wordLimitSetting">
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-      </select>
 
-      <input type="submit" value="Uygula" />
-    </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ayarlar</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/userSettings.css" />
+</head>
 
-    <input
-      type="button"
-      id="addWord"
-      onclick="window.location.href='wordAdd.html'"
-      value="Kelime Ekle"
-    />
-    <div style="width: 400px; height: 400px" id="analysisChartDiv">
-      <canvas id="analysisChart"></canvas>
-    </div>
-    <input
-      type="button"
-      id="printAnalyzes"
-      value="Çıktı Al"
-      onclick="window.print()"
-    />
+<body>
+  <form id="settingsForm">
+    <label for="wordLimitSetting">Ekrana Kaç Kelime çıksın</label>
+    <select name="wordLimitSetting" id="wordLimitSetting">
+    </select>
 
-    <div id="analysisReport">
-      <h3>Çözümlediğiniz kelimeler üzerinden analiziniz:</h3>
-      <p>Toplam Kelime Sayısı: 0</p>
-    </div>
+    <input type="submit" value="Uygula" />
+  </form>
 
-    <script src="script/userSettings.js"></script>
-  </body>
+  <input type="button" id="addWord" onclick="window.location.href='wordAdd.html'" value="Kelime Ekle" />
+  <div style="width: 400px; height: 400px" id="analysisChartDiv">
+    <canvas id="analysisChart"></canvas>
+  </div>
+  <input type="button" id="printAnalyzes" value="Çıktı Al" onclick="window.print()" />
+
+  <div id="analysisReport">
+    <h3>Çözümlediğiniz kelimeler üzerinden analiziniz:</h3>
+  </div>
+
+  <script src="script/userSettings.js"></script>
+  <script>
+    const select = document.getElementById('wordLimitSetting');
+    for (let i = 5; i <= 20; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      select.appendChild(option);
+    }
+  </script>
+</body>
+
 </html>

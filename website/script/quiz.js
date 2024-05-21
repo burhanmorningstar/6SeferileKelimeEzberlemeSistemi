@@ -36,7 +36,7 @@ function fetchQuestions(userId) {
 function submitAnswer(wordId, userId) {
   const answer = answerInput.value.trim();
   if (answer.length === 0) {
-    alert("Lütfen bir cevap giriniz.");
+    openAlert();
     return;
   }
   submitAnswerToApi(userId, wordId, answer);
@@ -102,8 +102,10 @@ const updateHtml = (question) => {
   if (question) {
     const questionSentenceElement = document.getElementById("questionSentence");
     questionSentenceElement.innerHTML = "";
-    const sentence = question.word_in_sentence.split(".")
-    sentence.forEach(sentence => {
+    const sentence = question.word_in_sentence
+      .split(".")
+      .map((sentence) => sentence.trim());
+    sentence.forEach((sentence) => {
       const pElement = document.createElement("p");
       pElement.textContent = sentence;
       questionSentenceElement.appendChild(pElement);
@@ -112,7 +114,6 @@ const updateHtml = (question) => {
     englishParagraph.textContent = `${question.word}`;
     resultQuestions.push(question.word);
     correctAnswers.push(question.word_meaning);
-
 
     const imageElement = document.getElementById("wordImg");
     imageElement.src = question.word_image;
@@ -171,3 +172,43 @@ function showResults() {
 function checkAnswer(userAnswer, correctAnswer) {
   return userAnswer === correctAnswer ? 1 : 0;
 }
+function closeAlert() {
+  setTimeout(function () {
+    document.querySelector(".more-ot-alert").style.display = "none";
+  }, 100);
+}
+
+function openAlert() {
+  document.querySelector(".more-ot-alert").style.display = "block";
+
+  if (document.documentElement.classList.contains("lt-ie9")) {
+    var speed = 300;
+    var times = 3;
+    var loop = setInterval(anim, speed);
+
+    function anim() {
+      times--;
+      if (times === 0) {
+        clearInterval(loop);
+      }
+
+      var alertBox = document.querySelector(".more-ot-alert");
+      alertBox.style.left = "450px";
+      setTimeout(function () {
+        alertBox.style.left = "440px";
+      }, speed);
+    }
+
+    anim();
+  }
+}
+
+document
+  .querySelector(".close-ot-alert")
+  .addEventListener("click", function () {
+    closeAlert();
+  });
+
+document.querySelector(".open-ot-alert").addEventListener("click", function () {
+  openAlert();
+});

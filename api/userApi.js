@@ -270,7 +270,7 @@ app.post("/verifyCode", async (req, res) => {
             console.log("Doğrulama kodu doğru");
             res.status(200).json({ message: "Doğrulama kodu doğru." });
           } else {
-            res.status(404).send("Doğrulama kodu bulunamadı.");
+            res.status(404).json({ message: "Doğrulama kodu bulunamadı." });
           }
         }
       }

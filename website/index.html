@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Main Page</title>
-    <link rel="stylesheet" href="css/index.css" />
-  </head>
-  <body>
-    <div id="welcomeUser">
-      <span id="userName"></span>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Page</title>
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+  <div class="wrapper d-flex justify-content-center align-items-center">
+    <div class="row ">
+      <div id="welcomeUser" class="col-md-6 d-flex align-items-center justify-content-center flex-column mb-3">
+        <span id="userName"></span>
+      </div>
+      <div id="buttons" class="col-12 d-flex justify-content-center">
+        <button id="quizButton" class="btn mr-2">Quiz'e başla</button>
+        <button id="signUpButton" class="btn mr-2">SignUp</button>
+        <button id="loginButton" class="btn mr-2">Login</button>
+        <button id="settingsButton" class="btn">Ayarlar</button>
+      </div>
     </div>
-    <div id="buttons">
-      <button id="quizButton">Quiz'e başla</button>
-      <button id="signUpButton">SignUp</button>
-      <button id="loginButton">Login</button>
-      <button id="settingsButton">Ayarlar</button>
-    </div>
-    <script src="script/index.js"></script>
-  </body>
+  </div>
+
+
+  <script src="script/index.js"></script>
+</body>
+
 </html>
