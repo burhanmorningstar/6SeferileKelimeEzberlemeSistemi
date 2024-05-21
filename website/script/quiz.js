@@ -61,9 +61,13 @@ async function submitAnswerToApi(userId, wordId, answer) {
     if (result.message === "Correct answer!") {
       console.log("Correct answer!");
       correctAnswerCount++;
+      let correctSound = new Audio("sounds/true.mp3");
+      correctSound.play();
     } else {
       console.log("Incorrect answer.");
       wrongAnswerCount++;
+      let wrongSound = new Audio("sounds/false.mp3");
+      wrongSound.play();
     }
     userAnswers.push(answer);
     console.log("Kullanıcı cevapları:", userAnswers);
