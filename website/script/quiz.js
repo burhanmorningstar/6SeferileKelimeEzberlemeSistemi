@@ -115,7 +115,10 @@ const updateHtml = (question) => {
       questionSentenceElement.appendChild(pElement);
     });
     const englishParagraph = document.getElementById("questionWord");
-    englishParagraph.textContent = `${question.word}`;
+    englishParagraph.textContent = `${question.word
+      .charAt(0)
+      .toUpperCase()}${question.word.slice(1)}`;
+
     resultQuestions.push(question.word);
     correctAnswers.push(question.word_meaning);
 
@@ -212,7 +215,3 @@ document
   .addEventListener("click", function () {
     closeAlert();
   });
-
-document.querySelector(".open-ot-alert").addEventListener("click", function () {
-  openAlert();
-});

@@ -41,14 +41,15 @@ loginSubmitBtn.addEventListener("click", async function (event) {
         console.error("Ayarlar alınırken bir hata oluştu:", error);
       }
       console.log("Giriş başarılı, user_id:", userId);
-      window.location.href = "index.html?user_id=" + userId;
+      window.location.href = "index2.html?user_id=" + userId;
     } else {
       // Giriş başarısız, hata mesajını göster
       console.error(data.message);
-      alert(data.message); // Kullanıcıya göstermek için bir uyarı penceresi aç
+      alert("Hatalı e-posta veya şifre girdiniz.");
     }
   } catch (error) {
-    console.error("Bir hata oluştu:", error);
-    alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+    console.error("Giriş isteği sırasında bir hata oluştu:", error);
+
+    alert("Hatalı e-posta veya şifre girdiniz.");
   }
 });

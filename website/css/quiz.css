@@ -23,6 +23,7 @@ body {
 
 #row-1 {
   height: 80%;
+
 }
 
 .wrapper {
@@ -57,13 +58,20 @@ body {
 }
 
 #content {
-  padding: 20px;
+  padding: 50px;
 }
 
 .word,
 .wordSentence {
   font-size: 45px;
-  font-weight: 4 00;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+}
+
+span {
+  font-size: 35px;
+  font-weight: 300;
   color: #fff;
   text-align: center;
   padding-bottom: 20px;

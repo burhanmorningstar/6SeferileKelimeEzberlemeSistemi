@@ -4,12 +4,14 @@ const apiUrl = "http://localhost:3000";
 const sendEmailForm = document.getElementById("sendEmailForm");
 const wrongEmail = document.getElementById("wrongEmail");
 const wrongCode = document.getElementById("wrongCode");
+const loader = document.getElementById("loader");
 
 sendEmailForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  loader.style.display = "block";
+  
 
   const email = document.getElementById("user_email_address").value;
-
   try {
     const response = await fetch(apiUrl + "/sendEmail", {
       method: "POST",
@@ -25,7 +27,9 @@ sendEmailForm.addEventListener("submit", async (e) => {
       throw new Error("E-mail kayıtlı değil.");
     }
     const data = await response.json();
+
     resetForm.style.display = "block";
+    sendEmailForm.style.display = "none";
   } catch (error) {
     console.error("E-mail kayıtlı değil:", error);
   }
