@@ -14,6 +14,7 @@ registerForm.addEventListener("submit", async (event) => {
       throw new Error("Lütfen tüm alanları doldurunuz.");
     }
     if (password !== confirmPassword) {
+      openAlert();
       throw new Error("Girilen parolalar uyuşmuyor.");
     }
     const response = await fetch(apiUrl + "/register", {
@@ -29,8 +30,49 @@ registerForm.addEventListener("submit", async (event) => {
     });
 
     const data = await response.json();
-    alert(data.message);
+    if (data.message === "User created successfully") {
+      alert("Kullanıcı başarıyla oluşturuldu.");
+      window.location.href = "login.html";
+    } else {
+      alert("Kullanıcı oluşturulurken bir hata oluştu.");
+    }
   } catch (error) {
     console.error("Bir hata oluştu:", error);
   }
 });
+function closeAlert() {
+  setTimeout(function () {
+    document.querySelector(".more-ot-alert").style.display = "none";
+  }, 100);
+}
+
+function openAlert() {
+  document.querySelector(".more-ot-alert").style.display = "block";
+
+  if (document.documentElement.classList.contains("lt-ie9")) {
+    var speed = 300;
+    var times = 3;
+    var loop = setInterval(anim, speed);
+
+    function anim() {
+      times--;
+      if (times === 0) {
+        clearInterval(loop);
+      }
+
+      var alertBox = document.querySelector(".more-ot-alert");
+      alertBox.style.left = "450px";
+      setTimeout(function () {
+        alertBox.style.left = "440px";
+      }, speed);
+    }
+
+    anim();
+  }
+}
+
+document
+  .querySelector(".close-ot-alert")
+  .addEventListener("click", function () {
+    closeAlert();
+  });
