@@ -1,3 +1,21 @@
+#goToMainMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  margin: 10px;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+}
+
+#goToMainMenu i {
+  font-size: 25px;
+  cursor: pointer;
+}
+
 h1 {
   font-family: "Fredoka One", cursive;
   font-size: 45px;
@@ -24,6 +42,10 @@ input[type="text"] {
   font-family: "Fredoka One", cursive;
 }
 
+input[type="text"]::placeholder {
+  color: #000;
+}
+
 #wordSentence {
   width: 90%;
 }
@@ -36,6 +58,8 @@ button {
   border-radius: 40px;
   background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 }
 
 button:hover {
@@ -44,6 +68,11 @@ button:hover {
 
 input[type="text"]:focus {
   border: 2px solid #000;
+}
+
+#imagePreview {
+  width: 100%;
+  max-width: 150px;
 }
 
 @media (max-width: 768px) {

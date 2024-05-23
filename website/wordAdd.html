@@ -9,19 +9,18 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="css/wordAdd.css">
     <link rel="stylesheet" href="css/main.css">
-    <style>
-        #imagePreview {
-            width: 100%;
-            max-width: 200px;
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <div class="wrapper d-grid">
         <div class="row">
-            <div class="col-md-6 d-flex justify-content-center align-items-center flex-column" id="content">
+            <div class="col-md-6 d-flex justify-content-center align-items-center flex-column position-relative"
+                id="content">
+                <a id="goToMainMenu"><i class="fa-solid fa-house"></i></a>
+
                 <h1>KELİME EKLEME</h1>
                 <form>
                     <div class="form-group">
@@ -91,5 +90,5 @@
             reader.readAsDataURL(event.target.files[0]);
         });
     </script>
-    
+
 </body>

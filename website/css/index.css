@@ -20,6 +20,11 @@ button {
   height: 45px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 25px;
+  border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
 }
 
 button:hover {

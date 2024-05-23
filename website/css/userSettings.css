@@ -1,3 +1,56 @@
+#goToMainMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  margin: 10px;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+}
+
+#goToMainMenu i {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+h1 {
+  font-family: "Fredoka One", cursive;
+  font-size: 45px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+#settingsForm label {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  text-align: center;
+}
+
+#analysisReport {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  text-align: center;
+}
+
+#analysisReport h3 {
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 20px;
+
+}
+
+.close {
+  width: 50px;
+}
+
 .modal-body-wrapper {
   overflow-y: scroll;
   height: 60vh;
@@ -21,4 +74,25 @@
   h1 {
     display: none !important;
   }
+}
+
+button,
+input {
+  width: 40%;
+  height: 45px;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+
+@media only screen and (max-width: 600px) {
+
+  #col2 {
+    display: none !important;
+  }
+
 }

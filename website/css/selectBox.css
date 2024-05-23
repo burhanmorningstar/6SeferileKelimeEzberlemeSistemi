@@ -1,0 +1,34 @@
+select {
+    margin: auto;
+    color: #000;
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+    background:
+        url(http://sharpik.com/wip/cuteselect/arrow.png) 295px 12px no-repeat white;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+
+select option {
+    background-color: white;
+    color: black;
+    width: 310px;
+    padding: 10px 15px;
+    height: 20px;
+    cursor: pointer;
+    border: 1px solid #000;
+}
+
+select option:hover {
+    padding-left: 25px;
+    width: 270px;
+    border: 1px solid black;
+
+}

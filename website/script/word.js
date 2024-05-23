@@ -42,3 +42,7 @@ form.addEventListener("submit", async function (event) {
     alert("Kelime eklenirken bir hata oluştu. Lütfen tekrar deneyin.");
   }
 });
+const goToMainMenu = document.getElementById("goToMainMenu");
+goToMainMenu.addEventListener("click", () => {
+  window.location.href = "index.html?user_id=" + userId;
+});

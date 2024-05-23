@@ -70,7 +70,7 @@ async function fetchAnalysisReport() {
       },
     });
 
-    analysisReportDiv.innerHTML += `<p>Toplam Kelime Sayısı: ${data.totalAsked}</p><p>Başarı Yüzdesi: ${data.percentage}%</p> <p>Yanlış Sayısı: ${data.totalWrong}</p> <p>Doğru Sayısı: ${data.totalCorrect}</p> <p>Toplam Sayı: ${data.totalAsked}</p>`;
+    analysisReportDiv.innerHTML += `<p>Toplam Kelime Sayısı: ${data.totalAsked}</p><p>Başarı Yüzdesi: ${data.percentage}%</p> <p>Yanlış Sayısı: ${data.totalWrong}</p> <p>Doğru Sayısı: ${data.totalCorrect}</p>`;
 
     // Veriyi global bir değişkene atayın ki showResults fonksiyonu bu veriyi kullanabilsin
     window.analysisData = data;
@@ -132,4 +132,8 @@ $(document).on("click", ".print", function () {
   section.append(content);
   $(".modal-body-wrapper").append(modalBody);
   modalBody[0].style.paddingTop = "0px";
+});
+const goToMainMenu = document.getElementById("goToMainMenu");
+goToMainMenu.addEventListener("click", () => {
+  window.location.href = "index.html?user_id=" + userId;
 });
