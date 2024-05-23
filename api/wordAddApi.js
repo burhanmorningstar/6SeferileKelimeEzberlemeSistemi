@@ -119,10 +119,16 @@ app.post(
                 .send("Dosya adları güncellenirken hata oluştu.");
             }
 
+            const today = new Date().toISOString().split("T")[0];
+            const next_quiz_date = today;
+            const how_many_times_asked = 0;
+            const how_many_wrong_answers = 0;
+            const how_many_correct_answers = 0;
+
             // worddetails tablosuna yeni kayıt ekleme
             const wordDetailsQuery =
-              "INSERT INTO worddetails (user_id, word_id, word_counter) VALUES (?, ?, 0)";
-            const wordDetailsValues = [userId, wordId];
+              "INSERT INTO worddetails (user_id, word_id, word_counter,next_quiz_date,how_many_times_asked,how_many_wrong_answers,how_many_correct_answers) VALUES (?, ?, 0, ?, ?, ?, ?)";
+            const wordDetailsValues = [userId, wordId,next_quiz_date,how_many_times_asked,how_many_wrong_answers,how_many_correct_answers];
 
             db.query(
               wordDetailsQuery,

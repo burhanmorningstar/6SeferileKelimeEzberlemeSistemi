@@ -33,6 +33,8 @@ registerForm.addEventListener("submit", async (event) => {
     if (data.message === "User created successfully") {
       alert("Kullanıcı başarıyla oluşturuldu.");
       window.location.href = "login.html";
+    }else if(response.status === 409){
+      alert("Bu e-posta adresi ile daha önce kayıt olunmuş.");
     } else {
       alert("Kullanıcı oluşturulurken bir hata oluştu.");
     }
