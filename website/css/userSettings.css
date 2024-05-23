@@ -71,6 +71,7 @@ h1 {
   #settingsForm,
   #printAnalyzes,
   #showModal,
+  #goToMainMenu,
   h1 {
     display: none !important;
   }

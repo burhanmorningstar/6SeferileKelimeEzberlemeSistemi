@@ -50,7 +50,7 @@ app.post(
     { name: "wordAudio", maxCount: 1 },
   ]),
   (req, res) => {
-    const { wordMeaning, word, wordSentence } = req.body;
+    const { wordMeaning, word, wordSentence, userId } = req.body;
 
     // İlk olarak kelimeyi veritabanına ekleyip word_id değerini alıyoruz
     const query =
@@ -119,13 +119,32 @@ app.post(
                 .send("Dosya adları güncellenirken hata oluştu.");
             }
 
-            res.status(201).send("Kelime başarıyla eklendi.");
+            // worddetails tablosuna yeni kayıt ekleme
+            const wordDetailsQuery =
+              "INSERT INTO worddetails (user_id, word_id, word_counter) VALUES (?, ?, 0)";
+            const wordDetailsValues = [userId, wordId];
+
+            db.query(
+              wordDetailsQuery,
+              wordDetailsValues,
+              (err, wordDetailsResult) => {
+                if (err) {
+                  console.error("Word details eklenirken hata oluştu:", err);
+                  return res
+                    .status(500)
+                    .send("Word details eklenirken hata oluştu.");
+                }
+
+                res.status(201).send("Kelime ve detaylar başarıyla eklendi.");
+              }
+            );
           });
         });
       });
     });
   }
 );
+
 app.listen(port, () => {
   console.log(`Sunucu ${port} portunda çalışıyor...`);
 });

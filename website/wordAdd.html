@@ -68,27 +68,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </script>
     <script src="script/word.js"></script>
-    <script>
-        document.getElementById('wordImage').addEventListener('change', function (event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var img = document.getElementById('imagePreview');
-                img.src = reader.result;
-                img.classList.remove('d-none');
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        });
-        document.getElementById('wordAudio').addEventListener('change', function (event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var audio = document.getElementById('audioPreview');
-                var source = document.getElementById('audioSource');
-                source.src = reader.result;
-                audio.load();
-                audio.classList.remove('d-none');
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        });
-    </script>
+
 
 </body>

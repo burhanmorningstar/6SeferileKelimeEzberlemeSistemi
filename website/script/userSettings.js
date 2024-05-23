@@ -3,6 +3,7 @@ let userId = urlParams.get("user_id");
 const apiUrl = "http://localhost:3003";
 const detailedAnalysis = document.getElementById("detailedAnalysis");
 const showModal = document.getElementById("showModal");
+const goToMainMenu = document.getElementById("goToMainMenu");
 
 showModal.addEventListener("click", () => showResults());
 
@@ -122,18 +123,18 @@ $(document).on("click", ".print", function () {
   const section = $("section");
   const modalBody = $(".modal-body");
   modalBody.detach();
-
   const content = $(".content").detach();
+  goToMainMenu.style.display = "none";
   section.append(modalBody);
 
   modalBody[0].style.paddingTop = "3300px";
   window.print();
+
   section.empty();
   section.append(content);
   $(".modal-body-wrapper").append(modalBody);
   modalBody[0].style.paddingTop = "0px";
 });
-const goToMainMenu = document.getElementById("goToMainMenu");
 goToMainMenu.addEventListener("click", () => {
   window.location.href = "index.html?user_id=" + userId;
 });

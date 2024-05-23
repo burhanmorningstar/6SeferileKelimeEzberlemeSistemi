@@ -4,8 +4,6 @@ select {
     width: 100px;
     height: 25px;
     cursor: pointer;
-    background:
-        url(http://sharpik.com/wip/cuteselect/arrow.png) 295px 12px no-repeat white;
     text-align: center;
     border: 1px solid #000;
     border-radius: 5px;

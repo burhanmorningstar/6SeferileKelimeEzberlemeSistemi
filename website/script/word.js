@@ -1,3 +1,6 @@
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get("user_id");
+
 const form = document.querySelector("form");
 const apiUrl = "http://localhost:3002";
 
@@ -16,6 +19,7 @@ form.addEventListener("submit", async function (event) {
   formData.append("wordImage", wordImage);
   formData.append("wordAudio", wordAudio);
   formData.append("wordSentence", wordSentence);
+  formData.append("userId", userId);
 
   try {
     const response = await fetch(apiUrl + "/addWord", {
