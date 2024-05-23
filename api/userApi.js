@@ -196,7 +196,8 @@ app.post("/sendEmail", async (req, res) => {
               from: "deneme123yazilimyapimi@gmail.com", // Gönderen e-posta adresi
               to: user_email_address, // Alıcı e-posta adresi
               subject: "Şifre Sıfırlama", // E-posta konusu
-              text: `Şifrenizi sıfırlamak için aşağıdaki 4 haneli kodu kullanın: ${verificationCode}`,
+              text: `Şifrenizi sıfırlamak için aşağıdaki 4 haneli kodu kullanın: ${verificationCode}
+              Made By Burhan&Aybars&Ibrahim&Yigit`,
             };
 
             db.query(
