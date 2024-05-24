@@ -47,7 +47,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](/website/images/quizScreen.png)
+[![Product Name Screen Shot][/website/images/quizScreen.png]](/website/images/quizScreen.png)
 
 This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
 
