@@ -30,7 +30,7 @@ registerForm.addEventListener("submit", async (event) => {
     });
 
     const data = await response.json();
-    if (data.message === "User created successfully") {
+    if (response.status === 201) {
       alert("Kullanıcı başarıyla oluşturuldu.");
       window.location.href = "login.html";
     }else if(response.status === 409){
