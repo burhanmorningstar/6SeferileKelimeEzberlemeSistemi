@@ -114,23 +114,22 @@ _Below is an example of how you can instruct your audience on installing and set
 
 [![Product Screen Shot][signup-screenshot]](/website/images/signup.png)
 
-This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
+This screen allows users to register for the knowledge game. The registration process is straightforward, requiring users to enter their personal information, create a username, and set a password. Once registered, users can start adding words and participating in quizzes to enhance their English vocabulary.
 
 [![Product Screen Shot][login-screenshot]](/website/images/login.png)
 
-This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
+The login screen enables returning users to access their accounts. Users can enter their credentials to log in and continue their learning journey. If they forget their password, they can use the password recovery feature to regain access to their account.
 
 [![Product Screen Shot][product-screenshot]](/website/images/quizScreen.png)
 
-This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
+The quiz module is the core of the knowledge game. Users are presented with quizzes where they must answer questions correctly six times in a row to demonstrate their mastery of each word. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year to reinforce learning.
 
 [![Product Screen Shot][settings-screenshot]](/website/images/settings.png)
 
-This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
+The settings screen allows users to customize their learning experience. Users can adjust the number of new words presented in each session, modify their personal information, and manage other preferences related to their account and the game.
 
 [![Product Screen Shot][print-screenshot]](/website/images/print.png)
-
-This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
+The analysis report feature provides users with detailed insights into their learning progress. Users can generate reports showing their success rates and progress across different topics. These reports can be printed for personal records or further analysis.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
