@@ -70,10 +70,10 @@ This website is a knowledge game that aims to help users learn English through i
 
 ## Team
 
-- Burhan İsmail Demir - [Github.com](https://github.com/burhanmorningstar) - Project Lead/Backend Developer
-- Aybars Mete Keleş - [Github.com](https://github.com/aybavs) - Frontend Developer
-- Yiğit Akdaş - [Github.com](https://github.com/yigitakdas7) - Designer
-- İbrahim Uğurlu - [Github.com](https://github.com/miugurlu) - Data Scientist
+- Burhan İsmail Demir - [[Github.com]](https://github.com/burhanmorningstar) - Project Lead/Backend Developer
+- Aybars Mete Keleş - [[Github.com]](https://github.com/aybavs) - Frontend Developer
+- Yiğit Akdaş - [[Github.com]](https://github.com/yigitakdas7) - Designer
+- İbrahim Uğurlu - [[Github.com]](https://github.com/miugurlu) - Data Scientist
 
 Project Link: [https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi](https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi)
 
@@ -170,5 +170,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [ExpressJs.com]: https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB
 [ExpressJs-url]: https://expressjs.com
 [Github.com]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
-[MySQL.com]: https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB
+[MySQL.com]: https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white
 [MySQL-url]: https://mysql.com
