@@ -2,7 +2,7 @@
     display: none;
     padding: 0.5rem;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 10px;
+    box-shadow: rgb(0 0 0 / 50%) 2px 2px 10px;
     background-color: #eee;
     border: 2px solid #000;
     height: 4em;
@@ -16,7 +16,7 @@
 }
 
 .more-ot-alert p {
-    font: 16px Arial;
+    font: 16px Arial, sans-serif;
     line-height: 18px;
     line-height: 1.2rem;
     margin: auto;
@@ -24,7 +24,7 @@
     color: red;
 }
 
-.more-ot-alert:before {
+.more-ot-alert::before {
     content: "";
     position: absolute;
     top: 24px;
@@ -37,7 +37,7 @@
     z-index: 1;
 }
 
-.more-ot-alert:after {
+.more-ot-alert::after {
     content: "";
     position: absolute;
     top: 27px;
@@ -67,5 +67,5 @@
 }
 
 .more-ot-alert .close-ot-alert i:hover {
-    color: #cc0000;
+    color: #c00;
 }

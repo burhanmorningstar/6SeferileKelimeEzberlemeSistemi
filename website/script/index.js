@@ -19,6 +19,7 @@ if (userId) {
   document.getElementById("parentWelcome")?.remove();
 }
 
+// Kullanıcı adını almak için API'yi başlat
 function initializeGetUserNameAPI(userId) {
   fetch(`${apiUrl}/getUserName/${userId}`)
     .then((response) => response.json())
@@ -31,6 +32,7 @@ function initializeGetUserNameAPI(userId) {
     });
 }
 
+// Giriş durumuna göre düğmelerin görünürlüğünü değiştir
 function toggleButtonsVisibility(isLoggedIn) {
   if (isLoggedIn) {
     quizButton.style.display = "block";

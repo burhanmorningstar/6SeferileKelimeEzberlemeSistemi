@@ -111,7 +111,7 @@ app.post(
             "UPDATE words SET word_image = ?, word_voice = ? WHERE word_id = ?";
           const updateValues = [relativeImagePath, relativeAudioPath, wordId];
 
-          db.query(updateQuery, updateValues, (err, updateResult) => {
+          db.query(updateQuery, updateValues, (err) => {
             if (err) {
               console.error("Dosya adları güncellenirken hata oluştu:", err);
               return res
@@ -133,7 +133,7 @@ app.post(
             db.query(
               wordDetailsQuery,
               wordDetailsValues,
-              (err, wordDetailsResult) => {
+              (err) => {
                 if (err) {
                   console.error("Word details eklenirken hata oluştu:", err);
                   return res

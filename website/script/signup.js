@@ -11,11 +11,11 @@ registerForm.addEventListener("submit", async (event) => {
 
   try {
     if (!email || !password || !confirmPassword || !fullname) {
-      throw new Error("Lütfen tüm alanları doldurunuz.");
+      return Promise.reject("Lütfen tüm alanları doldurunuz.");
     }
     if (password !== confirmPassword) {
       openAlert();
-      throw new Error("Girilen parolalar uyuşmuyor.");
+      return Promise.reject("Girilen parolalar uyuşmuyor.");
     }
     const response = await fetch(apiUrl + "/register", {
       method: "POST",

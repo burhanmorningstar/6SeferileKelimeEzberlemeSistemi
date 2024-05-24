@@ -6,10 +6,10 @@ const wrongEmail = document.getElementById("wrongEmail");
 const wrongCode = document.getElementById("wrongCode");
 const loader = document.getElementById("loader");
 
+// E-posta gönderme
 sendEmailForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   loader.style.display = "block";
-  
 
   const email = document.getElementById("user_email_address").value;
   try {
@@ -24,9 +24,8 @@ sendEmailForm.addEventListener("submit", async (e) => {
     });
     if (response.status !== 200) {
       openAlert(wrongEmail);
-      throw new Error("E-mail kayıtlı değil.");
+      return Promise.reject("E-mail kayıtlı değil.");
     }
-    const data = await response.json();
 
     resetForm.style.display = "block";
     sendEmailForm.style.display = "none";
@@ -35,6 +34,7 @@ sendEmailForm.addEventListener("submit", async (e) => {
   }
 });
 
+// Şifre sıfırlama
 resetForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -44,10 +44,10 @@ resetForm.addEventListener("submit", async (e) => {
 
   try {
     if (!verificationCode || !newPassword || !confirmPassword) {
-      throw new Error("Doğrulama kodu ve yeni parolaları giriniz.");
+      return Promise.reject("Doğrulama kodu ve yeni parolaları giriniz.");
     }
     if (newPassword !== confirmPassword) {
-      throw new Error("Girilen parolalar uyuşmuyor.");
+      return Promise.reject("Girilen parolalar uyuşmuyor.");
     }
 
     const response1 = await fetch(apiUrl + "/verifyCode", {
@@ -60,10 +60,9 @@ resetForm.addEventListener("submit", async (e) => {
       }),
     });
 
-    const data1 = await response1.json();
     if (response1.status !== 200) {
       openAlert(wrongCode);
-      throw new Error("Doğrulama kodu yanlış.");
+      return Promise.reject("Doğrulama kodu yanlış.");
     }
 
     const response2 = await fetch(apiUrl + "/resetPassword", {
@@ -78,20 +77,24 @@ resetForm.addEventListener("submit", async (e) => {
     });
     const data2 = await response2.json();
     console.log(data2);
-    if(data2.message === "Şifre başarıyla sıfırlandı.") {
+    if (data2.message === "Şifre başarıyla sıfırlandı.") {
       messageDiv.style.display = "block";
-      messageDiv.innerHTML = '<p>Şifre Başarıyla Sıfırlandı! <a href="login.html">Giriş Ekranına Dön</a></p>';
+      messageDiv.innerHTML =
+        '<p>Şifre Başarıyla Sıfırlandı! <a href="login.html">Giriş Ekranına Dön</a></p>';
     }
   } catch (error) {
     console.error("Şifre sıfırlama işlemi sırasında bir hata oluştu:", error);
   }
 });
+
+// Alertbox kapatma
 function closeAlert(element) {
   setTimeout(function () {
     element.style.display = "none";
   }, 100);
 }
 
+// Uyarı mesajını açma
 function openAlert(element) {
   element.style.display = "block";
 

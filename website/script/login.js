@@ -2,6 +2,7 @@ const apiUrl = "http://localhost:3000";
 const wordApiUrl = "http://localhost:3001";
 const loginSubmitBtn = document.getElementById("loginSubmitBtn");
 
+// Giriş yapma
 loginSubmitBtn.addEventListener("click", async function (event) {
   event.preventDefault();
 
@@ -53,6 +54,8 @@ loginSubmitBtn.addEventListener("click", async function (event) {
     openAlert();
   }
 });
+
+// Alert box göster
 function openAlert() {
   document.querySelector(".more-ot-alert").style.display = "block";
 
@@ -78,6 +81,7 @@ function openAlert() {
   }
 }
 
+// Aalert box kapat
 document
   .querySelector(".close-ot-alert")
   .addEventListener("click", function () {

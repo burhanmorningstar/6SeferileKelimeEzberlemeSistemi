@@ -10,6 +10,7 @@ let wrongAnswerCount = 0;
 let currentQuestionIndex = 0;
 let userId;
 const answerInput = document.getElementById("answer");
+const goToMainMenu = document.getElementById("go-to-main-menu");
 
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchQuestions(userId);
 });
 
+// Soruları API'den getirme
 function fetchQuestions(userId) {
   fetch(wordApiUrl + "/questions/" + userId)
     .then((response) => response.json())
@@ -33,16 +35,22 @@ function fetchQuestions(userId) {
     );
 }
 
-function submitAnswer(wordId, userId) {
+// Kullanıcının cevabını API'ye gönderme
+async function submitAnswer(wordId, userId) {
   const answer = answerInput.value.trim();
   if (answer.length === 0) {
     openAlert();
     return;
   }
-  submitAnswerToApi(userId, wordId, answer);
-  answerInput.value = "";
+  try {
+    await submitAnswerToApi(userId, wordId, answer);
+    answerInput.value = ""; // Cevap API'ye başarıyla gönderildikten sonra input'u temizle
+  } catch (error) {
+    console.error("Cevap gönderilirken bir hata oluştu:", error);
+  }
 }
 
+// Cevabı API'ye gönderme (async/await kullanarak)
 async function submitAnswerToApi(userId, wordId, answer) {
   try {
     const response = await fetch(wordApiUrl + "/answer", {
@@ -62,12 +70,12 @@ async function submitAnswerToApi(userId, wordId, answer) {
       console.log("Correct answer!");
       correctAnswerCount++;
       let correctSound = new Audio("sounds/true.mp3");
-      correctSound.play();
+      await correctSound.play();
     } else {
       console.log("Incorrect answer.");
       wrongAnswerCount++;
       let wrongSound = new Audio("sounds/false.mp3");
-      wrongSound.play();
+      await wrongSound.play();
     }
     userAnswers.push(answer);
     console.log("Kullanıcı cevapları:", userAnswers);
@@ -80,6 +88,7 @@ async function submitAnswerToApi(userId, wordId, answer) {
 
 let nextQuestion;
 
+// Bir sonraki soruyu gösterme
 function showNextQuestion() {
   if (currentQuestionIndex < questions.length) {
     nextQuestion = questions[currentQuestionIndex];
@@ -91,20 +100,26 @@ function showNextQuestion() {
     updateHtml(null);
   }
 }
-const submitButton = document.getElementById("submitBtn");
+
+const submitButton = document.getElementById("submit-btn");
 submitButton.addEventListener("click", () =>
   submitAnswer(nextQuestion.word_id, nextQuestion.user_id)
 );
 
-answerInput.addEventListener("keydown", (event) => {
+answerInput.addEventListener("keydown", async (event) => {
   if (event.key === "Enter") {
-    submitAnswer(nextQuestion.word_id, nextQuestion.user_id);
+    try {
+      await submitAnswer(nextQuestion.word_id, nextQuestion.user_id);
+    } catch (error) {
+      console.error('Bir hata oluştu:', error);
+    }
   }
 });
 
+// HTML'i güncelleme
 const updateHtml = (question) => {
   if (question) {
-    const questionSentenceElement = document.getElementById("questionSentence");
+    const questionSentenceElement = document.getElementById("question-sentence");
     questionSentenceElement.innerHTML = "";
     const sentence = question.word_in_sentence
       .split(".")
@@ -114,7 +129,7 @@ const updateHtml = (question) => {
       pElement.textContent = sentence;
       questionSentenceElement.appendChild(pElement);
     });
-    const englishParagraph = document.getElementById("questionWord");
+    const englishParagraph = document.getElementById("question-word");
     englishParagraph.textContent = `${question.word
       .charAt(0)
       .toUpperCase()}${question.word.slice(1)}`;
@@ -133,6 +148,8 @@ const updateHtml = (question) => {
     showResults();
   }
 };
+
+// Sonuçları gösterme
 const closeModalBtn = document.getElementById("closeModalBtn");
 closeModalBtn.addEventListener("click", () => {
   closeModal();
@@ -181,9 +198,11 @@ function showResults() {
   }
 }
 
+// Cevabı kontrol etme
 function checkAnswer(userAnswer, correctAnswer) {
   return userAnswer === correctAnswer ? 1 : 0;
 }
+
 function closeAlert() {
   setTimeout(function () {
     document.querySelector(".more-ot-alert").style.display = "none";
@@ -215,8 +234,14 @@ function openAlert() {
   }
 }
 
+goToMainMenu.addEventListener("click", () => {
+  window.location.href = "index.html?user_id=" + userId;
+});
+
+
 document
   .querySelector(".close-ot-alert")
   .addEventListener("click", function () {
     closeAlert();
   });
+

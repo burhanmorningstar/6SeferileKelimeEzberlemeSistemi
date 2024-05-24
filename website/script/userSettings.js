@@ -2,13 +2,13 @@ const urlParams = new URLSearchParams(window.location.search);
 let userId = urlParams.get("user_id");
 const apiUrl = "http://localhost:3003";
 const detailedAnalysis = document.getElementById("detailedAnalysis");
-const showModal = document.getElementById("showModal");
-const goToMainMenu = document.getElementById("goToMainMenu");
+const showModal = document.getElementById("show-modal");
+const goToMainMenu = document.getElementById("go-to-main-menu");
 
 showModal.addEventListener("click", () => showResults());
 
 document
-  .getElementById("settingsForm")
+  .getElementById("settings-form")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -31,7 +31,7 @@ document
       if (response.ok) {
         alert("Ayarlar başarıyla kaydedildi.");
       } else {
-        throw new Error("Ayarlar kaydedilirken bir hata oluştu.");
+        await Promise.reject("Ayarlar kaydedilirken bir hata oluştu.");
       }
     } catch (error) {
       console.error(error);
@@ -45,7 +45,7 @@ async function fetchAnalysisReport() {
     const data = await response.json();
 
     const analysisChartCanvas = document.getElementById("analysisChart");
-    const analysisReportDiv = document.getElementById("analysisReport");
+    const analysisReportDiv = document.getElementById("analysis-report");
     // Grafik oluşturma
     const ctx = analysisChartCanvas.getContext("2d");
     new Chart(ctx, {
@@ -57,11 +57,19 @@ async function fetchAnalysisReport() {
             label: "Cevaplar",
             data: [data.totalCorrect, data.totalWrong],
             backgroundColor: [
-              "rgba(75, 192, 192, 0.7)",
-              "rgba(255, 99, 132, 0.7)",
+              "rgba(75, 192, 192, 0.9)", // Daha canlı renkler
+              "rgba(255, 99, 132, 0.9)",
             ],
             borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
             borderWidth: 1,
+            hoverBackgroundColor: [
+              "rgba(75, 192, 192, 1)", // Üzerine gelindiğinde daha belirgin renkler
+              "rgba(255, 99, 132, 1)",
+            ],
+            hoverBorderColor: [
+              "rgba(75, 192, 192, 1)",
+              "rgba(255, 99, 132, 1)",
+            ],
           },
         ],
       },
@@ -73,7 +81,6 @@ async function fetchAnalysisReport() {
 
     analysisReportDiv.innerHTML += `<p>Toplam Kelime Sayısı: ${data.totalAsked}</p><p>Başarı Yüzdesi: ${data.percentage}%</p> <p>Yanlış Sayısı: ${data.totalWrong}</p> <p>Doğru Sayısı: ${data.totalCorrect}</p>`;
 
-    // Veriyi global bir değişkene atayın ki showResults fonksiyonu bu veriyi kullanabilsin
     window.analysisData = data;
   } catch (error) {
     console.error("Analiz raporu alınırken bir hata oluştu:", error);
@@ -110,12 +117,6 @@ function showResults() {
   modal.classList.add("show");
 }
 
-if (userId) {
-  analysisChartDiv.style.display = "block";
-  analysisReport.style.display = "block";
-  settingsForm.style.display = "block";
-}
-
 // Sayfa yüklendiğinde analiz raporunu al
 window.onload = fetchAnalysisReport;
 
@@ -127,12 +128,14 @@ $(document).on("click", ".print", function () {
   goToMainMenu.style.display = "none";
   section.append(modalBody);
 
-  modalBody[0].style.paddingTop = "3300px";
+  modalBody[0].style.paddingTop = "3500px";
   window.print();
 
   section.empty();
   section.append(content);
   $(".modal-body-wrapper").append(modalBody);
+  goToMainMenu.style.display = "block";
+  goToMainMenu.style.margin = "27px";
   modalBody[0].style.paddingTop = "0px";
 });
 goToMainMenu.addEventListener("click", () => {

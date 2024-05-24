@@ -37,7 +37,7 @@ app.post("/save-settings", (req, res) => {
       // Kullanıcıya ait ayarlar zaten var, güncelleme yap
       const updateQuery =
         "UPDATE settings SET word_limit = ? WHERE user_id = ?";
-      db.query(updateQuery, [wordLimit, userId], (err, result) => {
+      db.query(updateQuery, [wordLimit, userId], (err) => {
         if (err) {
           console.error("Ayarlar güncellenirken bir hata oluştu:", err);
           return res
@@ -50,7 +50,7 @@ app.post("/save-settings", (req, res) => {
       // Kullanıcıya ait ayarlar yok, ekle
       const insertQuery =
         "INSERT INTO settings (user_id, word_limit) VALUES (?, ?)";
-      db.query(insertQuery, [userId, wordLimit], (err, result) => {
+      db.query(insertQuery, [userId, wordLimit], (err) => {
         if (err) {
           console.error("Ayarlar eklenirken bir hata oluştu:", err);
           return res.status(500).send("Ayarlar eklenirken bir hata oluştu.");

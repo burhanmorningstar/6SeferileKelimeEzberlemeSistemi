@@ -1,7 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const http = require("http");
 const cors = require("cors");
 
@@ -91,7 +90,7 @@ app.post("/register", async (req, res) => {
             db.query(
               "INSERT INTO users (user_email_address, user_password, user_fullname) VALUES (?, ?, ?)",
               [user_email_address, hashedPassword, user_fullname],
-              (err, result) => {
+              (err) => {
                 if (err) {
                   console.error(
                     "Kullanıcı eklenirken bir hata oluştu: " + err.message

@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css?family=Fredoka One");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Quicksand");
+@import "https://fonts.googleapis.com/css?family=Fredoka One";
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap";
+@import "https://fonts.googleapis.com/css?family=Quicksand";
+@import "https://fonts.googleapis.com/css?family=Roboto";
 
 * {
     margin: 0;
@@ -23,6 +24,6 @@ body {
     height: 80vh;
     margin: auto;
     background: transparent;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     border-radius: 10px;
 }

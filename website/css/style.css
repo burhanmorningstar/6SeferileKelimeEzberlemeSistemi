@@ -28,7 +28,7 @@ h1 {
 }
 
 .form-group label {
-  font-family: "Poppins", sans-serif;
+  font-family: Poppins, sans-serif;
   font-size: 20px;
   color: #fff;
   font-weight: 500;
@@ -37,9 +37,8 @@ h1 {
 .form-group input {
   width: 80%;
   height: 100%;
-  border: none;
   outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgb(255 255 255 / 20%);
   border-radius: 40px;
   font-size: 16px;
   padding: 10px 45px 10px 20px;
@@ -78,7 +77,7 @@ h1 {
   outline: none;
   border-radius: 40px;
   background: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 }
 
 #form button:hover {
@@ -87,7 +86,7 @@ h1 {
 
 #form .register-link {
   padding-top: 20px;
-  font-family: "Poppins", sans-serif;
+  font-family: Poppins, sans-serif;
   font-size: 16px;
   color: #fff;
 }
@@ -105,46 +104,26 @@ h1 {
 @keyframes a {
   0% {
     transform: scale(0.8, 1.2);
-    -webkit-transform: scale(0.8, 1.2);
-    -moz-transform: scale(0.8, 1.2);
-    -ms-transform: scale(0.8, 1.2);
-    -o-transform: scale(0.8, 1.2);
   }
 
   25% {
     transform: scale(1.2, 0.8);
-    -webkit-transform: scale(1.2, 0.8);
-    -moz-transform: scale(1.2, 0.8);
-    -ms-transform: scale(1.2, 0.8);
-    -o-transform: scale(1.2, 0.8);
   }
 
   50% {
     transform: scale(0.8, 1.2);
-    -webkit-transform: scale(0.8, 1.2);
-    -moz-transform: scale(0.8, 1.2);
-    -ms-transform: scale(0.8, 1.2);
-    -o-transform: scale(0.8, 1.2);
   }
 
   75% {
     transform: scale(1.2, 0.8);
-    -webkit-transform: scale(1.2, 0.8);
-    -moz-transform: scale(1.2, 0.8);
-    -ms-transform: scale(1.2, 0.8);
-    -o-transform: scale(1.2, 0.8);
   }
 
   100% {
     transform: scale(1, 1);
-    -webkit-transform: scale(1, 1);
-    -moz-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     height: 100vh;
     overflow: hidden;
@@ -160,7 +139,7 @@ h1 {
   }
 
   .form-group input {
-    padding: 10px 10px;
+    padding: 10px;
     font-size: 14px;
   }
 }

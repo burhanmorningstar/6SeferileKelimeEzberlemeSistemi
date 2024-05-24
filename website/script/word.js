@@ -4,6 +4,7 @@ const userId = urlParams.get("user_id");
 const form = document.querySelector("form");
 const apiUrl = "http://localhost:3002";
 
+// Kelimeyi veritabanına ekleme
 form.addEventListener("submit", async function (event) {
   event.preventDefault();
 
@@ -11,7 +12,7 @@ form.addEventListener("submit", async function (event) {
   const turkishWord = document.getElementById("turkishWord").value;
   const wordImage = document.getElementById("wordImage").files[0];
   const wordAudio = document.getElementById("wordAudio").files[0];
-  const wordSentence = document.getElementById("wordSentence").value;
+  const wordSentence = document.getElementById("word-sentence").value;
 
   const formData = new FormData();
   formData.append("wordMeaning", turkishWord);
@@ -32,21 +33,21 @@ form.addEventListener("submit", async function (event) {
       // İsteği gönderdikten sonra formu temizle
       form.reset();
       // Önizleme resmini gizle
-      document.getElementById("imagePreview").classList.add("d-none");
+      document.getElementById("image-preview").classList.add("d-none");
       // Ses öğesini gizle
       const audioPreview = document.getElementById("audioPreview");
       audioPreview.classList.add("d-none");
       // Ses dosyasını temizle
       audioPreview.src = "";
     } else {
-      throw new Error("Kelime eklenirken bir hata oluştu.");
+      return Promise.reject("Kelime eklenirken bir hata oluştu.");
     }
   } catch (error) {
     console.error(error);
     alert("Kelime eklenirken bir hata oluştu. Lütfen tekrar deneyin.");
   }
 });
-const goToMainMenu = document.getElementById("goToMainMenu");
+const goToMainMenu = document.getElementById("go-to-main-menu");
 goToMainMenu.addEventListener("click", () => {
   window.location.href = "index.html?user_id=" + userId;
 });

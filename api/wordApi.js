@@ -147,7 +147,7 @@ app.post("/answer", async (req, res) => {
                 userId,
                 wordId,
               ],
-              (error, updateResult) => {
+              (error) => {
                 if (error) {
                   console.error("Error updating word details:", error);
                   res.status(500).json({ message: "Internal Server Error" });
@@ -179,7 +179,7 @@ app.post("/answer", async (req, res) => {
                   db.query(
                     insertQuery,
                     [userId, wordId, new Date().toISOString().split("T")[0]],
-                    (error, insertResult) => {
+                    (error) => {
                       if (error) {
                         console.error(
                           "Error inserting word into knownwords:",
@@ -208,7 +208,7 @@ app.post("/answer", async (req, res) => {
             how_many_times_asked = how_many_times_asked + 1
           WHERE user_id = ? AND word_id = ?
         `;
-        db.query(updateQuery, [userId, wordId], (error, updateResult) => {
+        db.query(updateQuery, [userId, wordId], (error) => {
           if (error) {
             console.error("Error updating word details:", error);
             res.status(500).json({ message: "Internal Server Error" });

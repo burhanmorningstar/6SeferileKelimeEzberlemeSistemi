@@ -1,4 +1,4 @@
-#goToMainMenu {
+#go-to-main-menu {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
   height: 60px;
 }
 
-#goToMainMenu i {
+#go-to-main-menu i {
   font-size: 25px;
   cursor: pointer;
 }
@@ -25,20 +25,19 @@ h1 {
   padding-bottom: 20px;
 }
 
-#settingsForm label {
-  font-family: "Poppins", sans-serif;
+#settings-form label {
+  font-family: Poppins, sans-serif;
   font-size: 18px;
   text-align: center;
 }
 
-#analysisReport {
-  font-family: "Poppins", sans-serif;
+#analysis-report {
+  font-family: Poppins, sans-serif;
   font-size: 20px;
   text-align: center;
 }
 
-#analysisReport h3 {
-  font-family: "Poppins", sans-serif;
+#analysis-report h2 {
   font-size: 30px;
   font-weight: 600;
   color: #fff;
@@ -66,12 +65,11 @@ h1 {
 }
 
 @media print {
-
   #col2,
-  #settingsForm,
-  #printAnalyzes,
-  #showModal,
-  #goToMainMenu,
+  #settings-form,
+  #print-analyzes,
+  #show-modal,
+  #go-to-main-menu,
   h1 {
     display: none !important;
   }
@@ -85,13 +83,12 @@ input {
   outline: none;
   border-radius: 40px;
   background: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 }
 
 
 
-@media only screen and (max-width: 600px) {
-
+@media only screen and (width <= 768px) {
   #col2 {
     display: none !important;
   }
