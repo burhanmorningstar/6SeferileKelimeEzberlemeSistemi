@@ -70,10 +70,10 @@ This website is a knowledge game that aims to help users learn English through i
 
 ## Team
 
-- Burhan İsmail Demir - [[Github.com]](https://github.com/burhanmorningstar) - Project Lead/Backend Developer
-- Aybars Mete Keleş - [[Github.com]](https://github.com/aybavs) - Frontend Developer
-- Yiğit Akdaş - [[Github.com]](https://github.com/yigitakdas7) - Designer
-- İbrahim Uğurlu - [[Github.com]](https://github.com/miugurlu) - Data Scientist
+- Burhan İsmail Demir - [![Github][Github.com]](https://github.com/burhanmorningstar) - Project Lead/Backend Developer
+- Aybars Mete Keleş - [![Github][Github.com]](https://github.com/aybavs) - Frontend Developer
+- Yiğit Akdaş - [![Github][Github.com]](https://github.com/yigitakdas7) - Designer
+- İbrahim Uğurlu - [![Github][Github.com]](https://github.com/miugurlu) - Data Scientist
 
 Project Link: [https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi](https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi)
 
@@ -83,8 +83,6 @@ Project Link: [https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSist
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
