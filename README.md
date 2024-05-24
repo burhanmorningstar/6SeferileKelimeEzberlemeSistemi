@@ -9,9 +9,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <h3 align="center">6 Seferile Kelime Ezberleme Sistemi</h3>
+  <h3 align="center">Word memorization system in 6 repetitions</h3>
   <p align="center">
-    Ingilizce kelimeleri ogrenmek hic bu kadar kolay olmamisti!
+    Learning English words has never been so easy!
     <br />
     <a href="https://github.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi"><strong>Explore the docs »</strong></a>
     <br />
@@ -47,7 +47,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/quizScreen.png]](/website/images/quizScreen.png)
+[![Product Screen Shot][product-screenshot]](/website/images/quizScreen.png)
 
 This website is a knowledge game that aims to help users learn English through interactive quizzes. The game has a user registration, login and password recovery system. Users can add words to the game, including English equivalents, sentences containing the words, pictures related to the words, and optional audio pronunciations. The game includes a quiz module where users must answer questions correctly six times in a row to demonstrate their mastery. The system then schedules retests for these mastered words at intervals ranging from 1 day to 1 year. Users can also customize the number of new words presented in each session. Furthermore, users can generate analysis reports showing their learning progress and success rates.
 
@@ -170,3 +170,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Github.com]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
 [MySQL.com]: https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white
 [MySQL-url]: https://mysql.com
+[product-screenshot]: https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/quizScreen.png
+[signup-screenshot]: https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/signup.png
+[login-screenshot]: https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/login.png
+[print-screenshot]: https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/print.png
+[settings-screenshot]: https://raw.githubusercontent.com/burhanmorningstar/6SeferileKelimeEzberlemeSistemi/main/website/images/settings.png
