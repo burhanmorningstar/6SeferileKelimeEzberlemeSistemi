@@ -103,9 +103,36 @@ _Below is an example of how you can instruct your audience on installing and set
    ```
 2. Install NPM packages
    ```sh
-   npm install
+   npm install express
+   npm install multer
+   npm install mysql
+   npm install cors
+   npm install path
+   npm install fs
+   npm install body-parser
+   npm install bcryptjs
+   npm install http
+   npm install randomstring
+   npm install nodemailer
    ```
-
+3. Start NodeJs Servers
+    Open four separate cmd tabs and paste the following codes into each of them.
+    ```sh
+    cd api
+    node userApi.js
+    ```
+    ```sh
+    cd api
+    node userAnalyzes.js
+    ```
+    ```sh
+    cd api
+    node wordApi.js
+    ```
+    ```sh
+    cd api
+    node wordAddApi.js
+    ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
