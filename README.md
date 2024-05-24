@@ -60,8 +60,8 @@ This website is a knowledge game that aims to help users learn English through i
 - [![CSS3][Css.com]][Css-url]
 - [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 - [![JQuery][JQuery.com]][JQuery-url]
-- [![Node.js][Node.js.com]][NodeJs-url]
-- [![Express.js][Express.js.com]][ExpressJs-url]
+- [![Node.js][NodeJs.com]][NodeJs-url]
+- [![Express.js][ExpressJs.com]][ExpressJs-url]
 - [![MySQL][MySQL.com]][MySQL-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
