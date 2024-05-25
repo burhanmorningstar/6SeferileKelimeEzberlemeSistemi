@@ -43,11 +43,15 @@ input[type="text"] {
 }
 
 input[type="text"]::placeholder {
+  font-family: Poppins, sans-serif;
   color: #000;
 }
 
 #word-sentence {
   width: 90%;
+}
+.form-group{
+  padding-bottom: 10px;
 }
 
 button {

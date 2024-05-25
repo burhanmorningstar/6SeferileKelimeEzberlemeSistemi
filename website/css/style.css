@@ -47,7 +47,7 @@ h1 {
 .form-group i {
   position: absolute;
   right: 70px;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%);
   font-size: 20px;
   color: #000;
@@ -124,22 +124,22 @@ h1 {
 }
 
 @media (width <= 768px) {
-  .container {
-    height: 100vh;
-    overflow: hidden;
-  }
 
   .form-group {
     width: 100%;
   }
 
-  img,
+  #col2,
   .form-group i {
-    display: none;
+    display: none !important;
   }
 
   .form-group input {
     padding: 10px;
     font-size: 14px;
+    height: 30px;
+  }
+  .form-group label {
+    font-size: 16px;
   }
 }
