@@ -69,13 +69,11 @@ async function submitAnswerToApi(userId, wordId, answer) {
     if (result.message === "Correct answer!") {
       console.log("Correct answer!");
       correctAnswerCount++;
-      let correctSound = new Audio("sounds/true.mp3");
-      await correctSound.play();
+      playAudio("sounds/true.mp3");
     } else {
       console.log("Incorrect answer.");
       wrongAnswerCount++;
-      let wrongSound = new Audio("sounds/false.mp3");
-      await wrongSound.play();
+      playAudio("sounds/false.mp3");
     }
     userAnswers.push(answer);
     console.log("Kullanıcı cevapları:", userAnswers);
@@ -84,6 +82,11 @@ async function submitAnswerToApi(userId, wordId, answer) {
   } catch (error) {
     console.error("Cevap gönderilirken bir hata oluştu:", error);
   }
+}
+
+function playAudio(path) {
+  let audio = new Audio(path);
+  audio.play();
 }
 
 let nextQuestion;

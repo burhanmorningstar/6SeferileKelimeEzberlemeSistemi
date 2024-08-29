@@ -128,22 +128,25 @@ app.post(
             // worddetails tablosuna yeni kayıt ekleme
             const wordDetailsQuery =
               "INSERT INTO worddetails (user_id, word_id, word_counter,next_quiz_date,how_many_times_asked,how_many_wrong_answers,how_many_correct_answers) VALUES (?, ?, 0, ?, ?, ?, ?)";
-            const wordDetailsValues = [userId, wordId,next_quiz_date,how_many_times_asked,how_many_wrong_answers,how_many_correct_answers];
+            const wordDetailsValues = [
+              userId,
+              wordId,
+              next_quiz_date,
+              how_many_times_asked,
+              how_many_wrong_answers,
+              how_many_correct_answers,
+            ];
 
-            db.query(
-              wordDetailsQuery,
-              wordDetailsValues,
-              (err) => {
-                if (err) {
-                  console.error("Word details eklenirken hata oluştu:", err);
-                  return res
-                    .status(500)
-                    .send("Word details eklenirken hata oluştu.");
-                }
-
-                res.status(201).send("Kelime ve detaylar başarıyla eklendi.");
+            db.query(wordDetailsQuery, wordDetailsValues, (err) => {
+              if (err) {
+                console.error("Word details eklenirken hata oluştu:", err);
+                return res
+                  .status(500)
+                  .send("Word details eklenirken hata oluştu.");
               }
-            );
+
+              res.status(201).send("Kelime ve detaylar başarıyla eklendi.");
+            });
           });
         });
       });
